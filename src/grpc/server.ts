@@ -17,8 +17,9 @@ server.addService(AuthService, {
   // forgotPassword: authHandler.forgotPassword,
   // resetPassword: authHandler.resetPassword,
 });
+
 server.addService(HealthService, {
-  health: healthHandler.health,
+  check: healthHandler.check,
   status: healthHandler.status,
   livez: healthHandler.livez,
   readyz: healthHandler.readyz,
