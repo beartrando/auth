@@ -8,21 +8,21 @@ const server = new grpc.Server();
 
 server.addService(AuthService, {
 
-  register: authHandler.register,
-  anonymousSignIn: authHandler.anonymousSignIn,
-  getUser: authHandler.getUser,
-  login: authHandler.login,
-  refreshTokens: authHandler.refreshTokens,
-  logout: authHandler.logout,
-  // forgotPassword: authHandler.forgotPassword,
-  // resetPassword: authHandler.resetPassword,
+    register: authHandler.register,
+    anonymousSignIn: authHandler.anonymousSignIn,
+    get: authHandler.get,
+    login: authHandler.login,
+    refreshTokens: authHandler.refreshTokens,
+    logout: authHandler.logout,
+    // forgotPassword: authHandler.forgotPassword,
+    // resetPassword: authHandler.resetPassword,
 });
 
 server.addService(HealthService, {
-  check: healthHandler.check,
-  status: healthHandler.status,
-  livez: healthHandler.livez,
-  readyz: healthHandler.readyz,
+    check: healthHandler.check,
+    status: healthHandler.status,
+    livez: healthHandler.livez,
+    readyz: healthHandler.readyz,
 });
 
 export default server;

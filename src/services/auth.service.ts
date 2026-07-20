@@ -5,174 +5,174 @@ import {kafkaProducersConfig} from "../config/kafka.config";
 import pgBossManager from "@shared/pg-boss-manager";
 import {Prisma} from '@prisma/client';
 
-export const createUser = async (email: string, password: string) => {
-  const existingUser = await prisma.user.findUnique({where: {email}});
-  if (existingUser) throw new Error('User already exists');
+export const create = async (email: string, password: string) => {
+    const existingUser = await prisma.user.findUnique({where: {email}});
+    if (existingUser) throw new Error('User already exists');
 
-  const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
 
-  return prisma.$transaction(async (tx: Prisma.TransactionClient) => {
-    const user = await tx.user.create({
-      data: {email, password: hashedPassword},
+    return prisma.$transaction(async (tx: Prisma.TransactionClient) => {
+        const user = await tx.user.create({
+            data: {email, password: hashedPassword},
+        });
+
+        pgBossManager.enqueueEventTx(kafkaProducersConfig.topicUserCreated, user, tx);
+
+        return user;
+
     });
-
-    pgBossManager.enqueueEventTx(kafkaProducersConfig.topicUserCreated, user, tx);
-
-    return user;
-
-  });
 
 };
 
-export const getUser = async (id: string) => {
-  const user = await prisma.user.findUnique({
-    where: {id},
-  });
+export const get = async (id: string) => {
+    const user = await prisma.user.findUnique({
+        where: {id},
+    });
 
-  if (!user) {
-    throw new Error("User does not exist");
-  }
+    if (!user) {
+        throw new Error("User does not exist");
+    }
 
-  return user;
+    return user;
 };
 
 /// @TODO: Verification should rely on more than just the deviceId
 /// @TODO: Add a secret. Erasing data should always result in a new account
 export const anonymousSignIn = async (deviceId: string) => {
-  let device = await prisma.device.findUnique({
-    where: {deviceId},
-    include: {user: true},
-  });
-
-  let user;
-
-  if (!device) {
-    user = await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
-      const newUser = await tx.user.create({
-        data: {
-          // email: randomUUID(),
-          devices: {
-            create: {deviceId},
-          },
-        },
-      });
-
-      await pgBossManager.enqueueEventTx(kafkaProducersConfig.topicUserCreated, newUser, tx);
-
-      return newUser;
+    let device = await prisma.device.findUnique({
+        where: {deviceId},
+        include: {user: true},
     });
 
-    // const newUser = user = await prisma.user.create({
-    //   data: {
-    //     email: randomUUID(),
-    //     devices: {
-    //       create: {deviceId},
-    //     },
-    //   },
-    // });
-    //
-    // await pgBossManager.enqueueEventTx(kafkaProducersConfig.topicUserCreated, {userId: newUser.id});
-    // user = newUser;
-  } else {
-    user = device.user;
-  }
+    let user;
 
-  const accessToken = generateAccessToken(user.id);
-  const refreshToken = generateRefreshToken(user.id);
+    if (!device) {
+        user = await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
+            const newUser = await tx.user.create({
+                data: {
+                    // email: randomUUID(),
+                    devices: {
+                        create: {deviceId},
+                    },
+                },
+            });
 
-  await prisma.session.deleteMany({where: {userId: user.id}});
-  await prisma.session.create({data: {userId: user.id, accessToken, refreshToken}});
+            await pgBossManager.enqueueEventTx(kafkaProducersConfig.topicUserCreated, newUser, tx);
 
-  return {accessToken, refreshToken};
+            return newUser;
+        });
+
+        // const newUser = user = await prisma.user.create({
+        //   data: {
+        //     email: randomUUID(),
+        //     devices: {
+        //       create: {deviceId},
+        //     },
+        //   },
+        // });
+        //
+        // await pgBossManager.enqueueEventTx(kafkaProducersConfig.topicUserCreated, {userId: newUser.id});
+        // user = newUser;
+    } else {
+        user = device.user;
+    }
+
+    const accessToken = generateAccessToken(user.id);
+    const refreshToken = generateRefreshToken(user.id);
+
+    await prisma.session.deleteMany({where: {userId: user.id}});
+    await prisma.session.create({data: {userId: user.id, accessToken, refreshToken}});
+
+    return {accessToken, refreshToken};
 };
 
 export const login = async (email: string, password: string) => {
-  // ищем пользователя по email
-  const user = await prisma.user.findUnique({where: {email}});
-  if (!user || !user.passwordHash) {
-    throw new Error('Invalid credentials');
-  }
+    // ищем пользователя по email
+    const user = await prisma.user.findUnique({where: {email}});
+    if (!user || !user.passwordHash) {
+        throw new Error('Invalid credentials');
+    }
 
-  // проверяем пароль
-  const isValid = await bcrypt.compare(password, user.passwordHash);
-  if (!isValid) {
-    throw new Error('Invalid credentials');
-  }
+    // проверяем пароль
+    const isValid = await bcrypt.compare(password, user.passwordHash);
+    if (!isValid) {
+        throw new Error('Invalid credentials');
+    }
 
-  // генерируем токены
-  const accessToken = generateAccessToken(user.id);
-  const refreshToken = generateRefreshToken(user.id);
+    // генерируем токены
+    const accessToken = generateAccessToken(user.id);
+    const refreshToken = generateRefreshToken(user.id);
 
-  // создаём новую сессию
-  await prisma.session.create({
-    data: {
-      userId: user.id,
-      accessToken,
-      refreshToken,
-    },
-  });
+    // создаём новую сессию
+    await prisma.session.create({
+        data: {
+            userId: user.id,
+            accessToken,
+            refreshToken,
+        },
+    });
 
-  return {accessToken, refreshToken};
+    return {accessToken, refreshToken};
 };
 
 
 export const refreshTokens = async (token: string) => {
-  const decoded = verifyRefreshToken(token) as any;
+    const decoded = verifyRefreshToken(token) as any;
 
-  // ищем сессию по refreshToken
-  const session = await prisma.session.findFirst({
-    where: {refreshToken: token},
-    include: {user: true},
-  });
+    // ищем сессию по refreshToken
+    const session = await prisma.session.findFirst({
+        where: {refreshToken: token},
+        include: {user: true},
+    });
 
-  if (!session || !session.user || session.user.id !== decoded.userId) {
-    throw new Error('Invalid refresh token');
-  }
+    if (!session || !session.user || session.user.id !== decoded.userId) {
+        throw new Error('Invalid refresh token');
+    }
 
-  const newAccessToken = generateAccessToken(session.user.id);
-  const newRefreshToken = generateRefreshToken(session.user.id);
+    const newAccessToken = generateAccessToken(session.user.id);
+    const newRefreshToken = generateRefreshToken(session.user.id);
 
-  // обновляем сессию
-  await prisma.session.update({
-    where: {id: session.id},
-    data: {
-      accessToken: newAccessToken,
-      refreshToken: newRefreshToken,
-    },
-  });
+    // обновляем сессию
+    await prisma.session.update({
+        where: {id: session.id},
+        data: {
+            accessToken: newAccessToken,
+            refreshToken: newRefreshToken,
+        },
+    });
 
-  return {
-    accessToken: newAccessToken,
-    refreshToken: newRefreshToken,
-  };
+    return {
+        accessToken: newAccessToken,
+        refreshToken: newRefreshToken,
+    };
 };
 
 export const logout = async (userId: string) => {
-  // удаляем все сессии пользователя
-  await prisma.session.deleteMany({
-    where: {userId},
-  });
+    // удаляем все сессии пользователя
+    await prisma.session.deleteMany({
+        where: {userId},
+    });
 
-  return {
-    success: true,
-    message: 'Logged out successfully',
-  };
+    return {
+        success: true,
+        message: 'Logged out successfully',
+    };
 };
 
 
 export const forgotPassword = async (userId: string) => {
-  // await prisma.user.update({
-  //     where: { id: userId },
-  //     data: { refreshToken: null },
-  // });
+    // await prisma.user.update({
+    //     where: { id: userId },
+    //     data: { refreshToken: null },
+    // });
 };
 
 export const resetPassword = async (userId: string) => {
-  // await prisma.user.update({
-  //     where: { id: userId },
-  //     data: { refreshToken: null },
-  // });
+    // await prisma.user.update({
+    //     where: { id: userId },
+    //     data: { refreshToken: null },
+    // });
 };
 
 

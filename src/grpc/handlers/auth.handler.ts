@@ -6,107 +6,107 @@ import logger from "@shared/logger";
 import {userToGrpc} from "../../lib/grpc-prisma-converters/user";
 
 export const register = async (
-  call: grpc.ServerUnaryCall<authGrpc.RegisterRequest, authGrpc.AuthObject>,
-  callback: grpc.sendUnaryData<authGrpc.AuthObject>
+    call: grpc.ServerUnaryCall<authGrpc.RegisterRequest, authGrpc.AuthObject>,
+    callback: grpc.sendUnaryData<authGrpc.AuthObject>
 ) => {
-  throw new Error('Registration is disabled');
-  const {email, password} = call.request;
+    throw new Error('Registration is disabled');
+    const {email, password} = call.request;
 
-  try {
-    await authService.createUser(email, password);
+    try {
+        await authService.create(email, password);
 
-    const result = await authService.login(email, password);
+        const result = await authService.login(email, password);
 
-    callback(null, result);
+        callback(null, result);
 
-  } catch (err: any) {
-    logger.log(err);
-    callbackError(callback, err);
-  }
+    } catch (err: any) {
+        logger.log(err);
+        callbackError(callback, err);
+    }
 };
 
 export const anonymousSignIn = async (
-  call: grpc.ServerUnaryCall<authGrpc.AnonymousSignInRequest, authGrpc.AuthObject>,
-  callback: grpc.sendUnaryData<authGrpc.AuthObject>
+    call: grpc.ServerUnaryCall<authGrpc.AnonymousSignInRequest, authGrpc.AuthObject>,
+    callback: grpc.sendUnaryData<authGrpc.AuthObject>
 ) => {
-  try {
-    const {deviceId} = call.request;
-    // logger.log('anonymousSignIn ' + deviceId);
-    const result = await authService.anonymousSignIn(deviceId);
+    try {
+        const {deviceId} = call.request;
+        // logger.log('anonymousSignIn ' + deviceId);
+        const result = await authService.anonymousSignIn(deviceId);
 
-    callback(null, result);
+        callback(null, result);
 
-  } catch (err: any) {
-    logger.log(err);
-    callbackError(callback, err);
-  }
+    } catch (err: any) {
+        logger.log(err);
+        callbackError(callback, err);
+    }
 };
 
 export const login = async (
-  call: grpc.ServerUnaryCall<authGrpc.LoginRequest, authGrpc.AuthObject>,
-  callback: grpc.sendUnaryData<authGrpc.AuthObject>
+    call: grpc.ServerUnaryCall<authGrpc.LoginRequest, authGrpc.AuthObject>,
+    callback: grpc.sendUnaryData<authGrpc.AuthObject>
 ) => {
-  throw new Error('Login is disabled');
-  const {email, password} = call.request;
+    throw new Error('Login is disabled');
+    const {email, password} = call.request;
 
-  try {
-    const result = await authService.login(email, password);
+    try {
+        const result = await authService.login(email, password);
 
-    callback(null, result);
+        callback(null, result);
 
-  } catch (err: any) {
-    logger.log(err);
-    callbackError(callback, err);
-  }
+    } catch (err: any) {
+        logger.log(err);
+        callbackError(callback, err);
+    }
 };
 
 export const refreshTokens = async (
-  call: grpc.ServerUnaryCall<authGrpc.RefreshTokensRequest, authGrpc.AuthObject>,
-  callback: grpc.sendUnaryData<authGrpc.AuthObject>
+    call: grpc.ServerUnaryCall<authGrpc.RefreshTokensRequest, authGrpc.AuthObject>,
+    callback: grpc.sendUnaryData<authGrpc.AuthObject>
 ) => {
-  const {token} = call.request;
+    const {token} = call.request;
 
-  try {
-    const response = await authService.refreshTokens(token);
+    try {
+        const response = await authService.refreshTokens(token);
 
-    callback(null, response);
+        callback(null, response);
 
-  } catch (err: any) {
-    logger.log(err);
-    callbackError(callback, err);
-  }
+    } catch (err: any) {
+        logger.log(err);
+        callbackError(callback, err);
+    }
 };
 
 export const logout = async (
-  call: grpc.ServerUnaryCall<authGrpc.LogoutRequest, authGrpc.LogoutResponse>,
-  callback: grpc.sendUnaryData<authGrpc.LogoutResponse>
+    call: grpc.ServerUnaryCall<authGrpc.LogoutRequest, authGrpc.LogoutResponse>,
+    callback: grpc.sendUnaryData<authGrpc.LogoutResponse>
 ) => {
-  const {userId} = call.request;
+    const {userId} = call.request;
 
-  try {
-    const response = await authService.logout(userId);
+    try {
+        const response = await authService.logout(userId);
 
-    callback(null, response);
+        callback(null, response);
 
-  } catch (err: any) {
-    logger.log(err);
-    callbackError(callback, err);
-  }
+    } catch (err: any) {
+        logger.log(err);
+        callbackError(callback, err);
+    }
 };
 
-export const getUser = async (
-  call: grpc.ServerUnaryCall<authGrpc.UserIdRequest, authGrpc.UserObject>,
-  callback: grpc.sendUnaryData<authGrpc.UserObject>
+export const get = async (
+    call: grpc.ServerUnaryCall<authGrpc.UserIdRequest, authGrpc.UserObject>,
+    callback: grpc.sendUnaryData<authGrpc.UserObject>
 ) => {
-  try {
-    const {userId} = call.request;
-    // logger.log('anonymousSignIn ' + deviceId);
-    const result = userToGrpc(await authService.getUser(userId));
+    try {
+        const {userId} = call.request;
+        // logger.log('anonymousSignIn ' + deviceId);
+        const result = userToGrpc(await authService.get(userId));
 
-    callback(null, result);
+        callback(null, result);
 
-  } catch (err: any) {
-    logger.log(err);
-    callbackError(callback, err);
-  }
+    } catch (err: any) {
+        logger.log(err);
+        callbackError(callback, err);
+    }
 };
