@@ -40,6 +40,8 @@ RUN pnpm --filter auth prisma:generate
 # ---------- DEV ----------
 FROM deps AS dev
 
+COPY services/auth/tsconfig.test.json ./services/auth/
+
 ENV NODE_ENV=development
 
 RUN chown -R node:node /usr/src/app
