@@ -17,7 +17,7 @@ export const create = async (email: string, password: string) => {
             data: {email, password: hashedPassword},
         });
 
-        pgBossManager.enqueueEventTx(kafkaProducersConfig.topicUserCreated, user, tx);
+        pgBossManager.queue.enqueueTx(kafkaProducersConfig.userCreated, user, tx);
 
         return user;
 
@@ -58,7 +58,7 @@ export const anonymousSignIn = async (deviceId: string) => {
                 },
             });
 
-            await pgBossManager.enqueueEventTx(kafkaProducersConfig.topicUserCreated, newUser, tx);
+            await pgBossManager.queue.enqueueTx(kafkaProducersConfig.userCreated, newUser, tx);
 
             return newUser;
         });
@@ -72,7 +72,7 @@ export const anonymousSignIn = async (deviceId: string) => {
         //   },
         // });
         //
-        // await pgBossManager.enqueueEventTx(kafkaProducersConfig.topicUserCreated, {userId: newUser.id});
+        // await pgBossManager.queue.enqueueTx(kafkaProducersConfig.topicUserCreated, {userId: newUser.id});
         // user = newUser;
     } else {
         user = device.user;
