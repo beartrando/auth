@@ -41,8 +41,6 @@ async function startGrpc(): Promise<void> {
     );
 }
 
-
-
 async function startPgBoss(): Promise<void> {
     void pgBossManager.start(
         pgBossConfig,

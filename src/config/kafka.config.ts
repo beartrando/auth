@@ -4,7 +4,6 @@ const kafkaConfig = {
     groupId: process.env.KAFKA_GROUP_ID || 'auth-service',
 };
 
-
 type ConsumerConfig = {
     topic: string;
     handler: (message: unknown) => Promise<void>;

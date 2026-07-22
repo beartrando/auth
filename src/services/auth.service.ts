@@ -72,7 +72,7 @@ export const anonymousSignIn = async (deviceId: string) => {
         //   },
         // });
         //
-        // await pgBossManager.queue.enqueueTx(kafkaProducersConfig.topicUserCreated, {userId: newUser.id});
+        // await pgBossManager.queue.enqueueTx(kafkaProducersConfig.userCreated, {userId: newUser.id});
         // user = newUser;
     } else {
         user = device.user;
