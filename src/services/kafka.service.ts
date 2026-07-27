@@ -10,7 +10,7 @@ export class KafkaService {
     constructor(private readonly config: KafkaConfig) {
     }
 
-    async retryKafkaInit(
+    async retryInit(
         fn: () => Promise<void>,
     ): Promise<void> {
         while (true) {
@@ -34,13 +34,13 @@ export class KafkaService {
         const configs = Object.values(
             kafkaConsumersConfig,
         );
-        await this.retryKafkaInit(
+        await this.retryInit(
             async () => {
                 await Promise.all(
                     configs.map(
                         async ({topic, handler}) => {
                             await createConsumer(
-                                kafkaConfig,
+                                this.config,
                                 {
                                     topic,
                                     handler,
@@ -54,9 +54,8 @@ export class KafkaService {
     }
 
 
-    async init() {
-        this.createKafkaConsumers();
-
+    async init(): Promise<void> {
+        await this.createKafkaConsumers();
     }
 
     async stop() {
