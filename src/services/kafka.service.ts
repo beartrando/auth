@@ -10,55 +10,48 @@ export class KafkaService {
     constructor(private readonly config: KafkaConfig) {
     }
 
-    async retryInit(
+    private async createConsumers(): Promise<void> {
+        const configs = Object.values(kafkaConsumersConfig);
+
+        await Promise.all(
+            configs.map(({ topic, handler }) =>
+                createConsumer(this.config, {
+                    topic,
+                    handler,
+                }),
+            ),
+        );
+    }
+
+    private async retryInit(
         fn: () => Promise<void>,
     ): Promise<void> {
         while (true) {
             try {
                 await fn();
-                logger.info(
-                    '✅ Kafka initialized',
-                );
+
+                logger.info("✅ Kafka initialized");
                 return;
             } catch (err) {
                 logger.warn(
-                    {err},
-                    '⏳ Waiting for Kafka topics...',
+                    { err },
+                    "⏳ Waiting for Kafka topics...",
                 );
+
                 await sleep(3000);
             }
         }
     }
 
-    async createKafkaConsumers(): Promise<void> {
-        const configs = Object.values(
-            kafkaConsumersConfig,
-        );
-        await this.retryInit(
-            async () => {
-                await Promise.all(
-                    configs.map(
-                        async ({topic, handler}) => {
-                            await createConsumer(
-                                this.config,
-                                {
-                                    topic,
-                                    handler,
-                                },
-                            );
-                        },
-                    ),
-                );
-            },
-        );
-    }
-
 
     async init(): Promise<void> {
-        await this.createKafkaConsumers();
+        await this.retryInit(() => this.createConsumers());
     }
 
-    async stop() {
+    async stop(): Promise<void> {
+        if (this.producer) {
+            await this.producer.disconnect();
+        }
     }
 
     async getProducer(): Promise<KafkaProducer> {
@@ -73,7 +66,8 @@ export class KafkaService {
         try {
             const producer = await this.getProducer();
 
-            await producer.send('healthcheck', [{value: 'ping'}]);
+            // await producer.send('healthcheck', [{value: 'ping'}]);
+            await producer.send('healthcheck', 'ping');
 
             return true;
         } catch (err) {
