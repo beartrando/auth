@@ -154,10 +154,7 @@ export const logout = async (userId: string) => {
         where: {userId},
     });
 
-    return {
-        success: true,
-        message: 'Logged out successfully',
-    };
+    return {};
 };
 
 

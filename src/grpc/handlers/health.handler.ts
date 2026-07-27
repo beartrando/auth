@@ -1,7 +1,7 @@
 import * as grpc from '@grpc/grpc-js';
 import * as healthGrpc from '../generated/common/health';
 import * as emptyGrpc from '../generated/common/empty';
-import * as heathService from '../../services/health.service';
+// import * as heathService from '../../services/health.service';
 import {callbackError} from './callback.error';
 import logger from "@shared/logger";
 
@@ -10,9 +10,9 @@ export const check = async (
     callback: grpc.sendUnaryData<healthGrpc.HealthReport>
 ) => {
     try {
-        const response = await heathService.check();
-
-        callback(null, response);
+        // const response = await heathService.check();
+        //
+        // callback(null, response);
 
     } catch (err: any) {
         logger.log(err);
@@ -25,9 +25,9 @@ export const status = async (
     callback: grpc.sendUnaryData<healthGrpc.ServiceStatus>
 ) => {
     try {
-        const response = await heathService.status();
-
-        callback(null, response);
+        // const response = await heathService.status();
+        //
+        // callback(null, response);
 
     } catch (err: any) {
         logger.log(err);
@@ -40,9 +40,9 @@ export const livez = async (
     callback: grpc.sendUnaryData<healthGrpc.LiveStatus>
 ) => {
     try {
-        const response = await heathService.livez();
-
-        callback(null, response);
+        // const response = await heathService.livez();
+        //
+        // callback(null, response);
 
     } catch (err: any) {
         logger.log(err);
@@ -55,9 +55,9 @@ export const readyz = async (
     callback: grpc.sendUnaryData<healthGrpc.ReadyStatus>
 ) => {
     try {
-        const response = await heathService.readyz();
-
-        callback(null, response);
+        // const response = await heathService.readyz();
+        //
+        // callback(null, response);
 
     } catch (err: any) {
         logger.log(err);

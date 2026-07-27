@@ -1,9 +1,12 @@
 import * as grpc from '@grpc/grpc-js';
 import * as authGrpc from '../generated/auth';
+import * as responseGrpc from '../generated/common/response';
+import * as emptyGrpc from '../generated/common/empty';
 import * as authService from '../../services/auth.service';
 import {callbackError} from './callback.error';
 import logger from "@shared/logger";
 import {userToGrpc} from "../../lib/grpc-prisma-converters/user";
+import {getUserIdFromGrpcRequest} from "../../lib/grpcRequestMetadata";
 
 export const register = async (
     call: grpc.ServerUnaryCall<authGrpc.RegisterRequest, authGrpc.AuthObject>,
@@ -78,10 +81,10 @@ export const refreshTokens = async (
 };
 
 export const logout = async (
-    call: grpc.ServerUnaryCall<authGrpc.LogoutRequest, authGrpc.LogoutResponse>,
-    callback: grpc.sendUnaryData<authGrpc.LogoutResponse>
+    call: grpc.ServerUnaryCall<emptyGrpc.Empty, responseGrpc.EmptyResponse>,
+    callback: grpc.sendUnaryData<responseGrpc.EmptyResponse>
 ) => {
-    const {userId} = call.request;
+    const userId = getUserIdFromGrpcRequest(call);
 
     try {
         const response = await authService.logout(userId);
@@ -101,6 +104,23 @@ export const get = async (
     try {
         const {userId} = call.request;
         // logger.log('anonymousSignIn ' + deviceId);
+        const result = userToGrpc(await authService.get(userId));
+
+        callback(null, result);
+
+    } catch (err: any) {
+        logger.log(err);
+        callbackError(callback, err);
+    }
+};
+
+
+export const getMe = async (
+    call: grpc.ServerUnaryCall<authGrpc.UserIdRequest, authGrpc.UserObject>,
+    callback: grpc.sendUnaryData<authGrpc.UserObject>
+) => {
+    try {
+        const userId = getUserIdFromGrpcRequest(call);
         const result = userToGrpc(await authService.get(userId));
 
         callback(null, result);
