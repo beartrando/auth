@@ -1,7 +1,7 @@
 import logger from '@shared/logger';
 import grpcService from "./services/grpc.service";
 import prismaService from "./services/prisma.service";
-import pgbossService from "./services/pgboss.service";
+import pgBossService from "./services/pg-boss.service";
 import kafkaService from "./services/kafka.service";
 
 async function bootstrap(): Promise<void> {
@@ -9,7 +9,7 @@ async function bootstrap(): Promise<void> {
     try {
         await grpcService.init();
         await prismaService.init();
-        await pgbossService.init();
+        await pgBossService.init();
         await kafkaService.init();
 
         logger.info(
@@ -32,7 +32,7 @@ async function bootstrap(): Promise<void> {
 
             await grpcService.stop();
             await prismaService.stop();
-            await pgbossService.stop();
+            await pgBossService.stop();
             await kafkaService.stop();
 
             process.exit(0);

@@ -5,7 +5,7 @@ import logger from "@shared/logger";
 import sleep from "../utils/sleep";
 
 
-export class PgbossService {
+export class PgBossService {
 
     constructor() {
     }
@@ -51,6 +51,6 @@ export class PgbossService {
 
 }
 
-const pgbossService = new PgbossService()
+const pgBossService = new PgBossService()
 
-export default pgbossService;
+export default pgBossService;
