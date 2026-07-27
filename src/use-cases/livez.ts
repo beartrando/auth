@@ -1,6 +1,6 @@
-import {prisma} from '../lib/prisma';
+import {prisma} from '../utils/prisma';
 import bcrypt from 'bcrypt';
-import {generateAccessToken, generateRefreshToken, verifyRefreshToken} from '../lib/token';
+import {generateAccessToken, generateRefreshToken, verifyRefreshToken} from '../utils/token';
 import {kafkaProducersConfig} from "../config/kafka.config";
 import pgBossManager from "@shared/pg-boss-manager";
 import {Prisma} from '@prisma/client';

@@ -1,5 +1,4 @@
 import * as grpc from "@grpc/grpc-js";
-import {AuthService} from '../grpc/generated/auth';
 import {HealthService} from '../grpc/generated/common/health';
 // import * as authHandler from "../grpc/handlers/auth.handler";
 import * as healthHandler from "../grpc/handlers/health.handler";
@@ -13,7 +12,7 @@ export class GrpcService {
         this.server = new grpc.Server();
     }
 
-    async init() {
+    async init(): Promise<void> {
         return new Promise<void>(
             (resolve, reject) => {
                 this.addServices();
@@ -29,7 +28,7 @@ export class GrpcService {
 
                             return reject(err);
                         }
-                        this.server.start()
+                        this.server.start();
                         logger.info(
                             `🟢 gRPC server started on port ${port}`,
                         );
@@ -38,11 +37,9 @@ export class GrpcService {
                 );
             },
         );
-
-
     }
 
-    private addServices() {
+    private registerAuthService() {
         // this.server.addService(AuthService, {
         //
         //     register: authHandler.register,
@@ -55,13 +52,20 @@ export class GrpcService {
         //     // forgotPassword: authHandler.forgotPassword,
         //     // resetPassword: authHandler.resetPassword,
         // });
+    }
 
+    private registerHealthService() {
         this.server.addService(HealthService, {
             check: healthHandler.check,
             status: healthHandler.status,
             livez: healthHandler.livez,
             readyz: healthHandler.readyz,
         });
+    }
+
+    private addServices() {
+        this.registerAuthService();
+        this.registerHealthService();
     }
 
     stop() {

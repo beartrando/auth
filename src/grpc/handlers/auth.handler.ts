@@ -5,8 +5,8 @@ import * as emptyGrpc from '../generated/common/empty';
 import * as authService from '../../services/auth.service';
 import {callbackError} from './callback.error';
 import logger from "@shared/logger";
-import {userToGrpc} from "../../lib/grpc-prisma-converters/user";
-import {getUserIdFromGrpcRequest} from "../../lib/grpcRequestMetadata";
+import {userToGrpc} from "../../utils/grpc-prisma-converters/user";
+import {getUserIdFromGrpcRequest} from "../../utils/grpcRequestMetadata";
 
 export const register = async (
     call: grpc.ServerUnaryCall<authGrpc.RegisterRequest, authGrpc.AuthObject>,

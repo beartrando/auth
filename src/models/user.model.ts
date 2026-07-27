@@ -1,4 +1,4 @@
-// import {battleToPrisma} from "../lib/grpc-prisma-converters/battle";
+// import {battleToPrisma} from "../utils/grpc-prisma-converters/battle";
 // import {NotFoundError} from "../services/battle.service";
 
 export class UserModel {

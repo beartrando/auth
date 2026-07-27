@@ -1,6 +1,8 @@
 import pgBossManager from '@shared/pg-boss-manager';
-import pgBossConfig from './config/pg.boss.config';
-import {kafkaProducersConfig} from "../config/kafka.config";
+import kafkaConfig, {kafkaProducersConfig} from "../config/kafka.config";
+import pgBossConfig from "../config/pg.boss.config";
+import logger from "@shared/logger";
+import sleep from "../utils/sleep";
 
 
 export class PgbossService {
@@ -13,7 +15,7 @@ export class PgbossService {
 
         await pgBossManager.waitUntilReady();
 
-        await initKafkaBridge();
+        await this.initKafkaBridge();
     }
 
     async initKafkaBridge(): Promise<void> {

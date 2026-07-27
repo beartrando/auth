@@ -1,6 +1,7 @@
 import {createConsumer, createProducer, KafkaConfig, KafkaProducer} from "@shared/kafka-manager";
 import logger from "@shared/logger";
-import kafkaConfig, {kafkaConsumersConfig,} from './config/kafka.config';
+import kafkaConfig, {kafkaConsumersConfig,} from '../config/kafka.config';
+import sleep from "../utils/sleep";
 
 export class KafkaService {
 
@@ -9,8 +10,7 @@ export class KafkaService {
     constructor(private readonly config: KafkaConfig) {
     }
 
-
-    retryKafkaInit(
+    async retryKafkaInit(
         fn: () => Promise<void>,
     ): Promise<void> {
         while (true) {
@@ -30,13 +30,11 @@ export class KafkaService {
         }
     }
 
-    async function
-
-    createKafkaConsumers(): Promise<void> {
+    async createKafkaConsumers(): Promise<void> {
         const configs = Object.values(
             kafkaConsumersConfig,
         );
-        await retryKafkaInit(
+        await this.retryKafkaInit(
             async () => {
                 await Promise.all(
                     configs.map(
