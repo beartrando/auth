@@ -1,20 +1,25 @@
-import {PrismaClient} from '@prisma/client';
+import { PrismaClient } from "@prisma/client";
 
 export class PrismaService {
-
-    private prisma: PrismaClient;
+    private readonly prisma: PrismaClient;
 
     constructor() {
         this.prisma = new PrismaClient();
     }
 
-    async init() {}
+    async init(): Promise<void> {
+        // await this.prisma.$connect();
+    }
 
-    async stop() {}
+    async stop(): Promise<void> {
+        // await this.prisma.$disconnect();
+    }
 
+    get client(): PrismaClient {
+        return this.prisma;
+    }
 }
 
 export const prismaService = new PrismaService();
 
 export default prismaService;
-
