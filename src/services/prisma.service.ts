@@ -8,15 +8,22 @@ export class PrismaService {
     }
 
     async init(): Promise<void> {
-        // await this.prisma.$connect();
     }
 
     async stop(): Promise<void> {
-        // await this.prisma.$disconnect();
     }
 
     get client(): PrismaClient {
         return this.prisma;
+    }
+
+    async check(): Promise<boolean> {
+        try {
+            await this.prisma.$queryRaw`SELECT 1`;
+            return true;
+        } catch {
+            return false;
+        }
     }
 }
 

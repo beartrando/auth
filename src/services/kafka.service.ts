@@ -62,7 +62,7 @@ export class KafkaService {
         return this.producer;
     }
 
-    async health(): Promise<boolean> {
+    async check(): Promise<boolean> {
         try {
             const producer = await this.getProducer();
 
