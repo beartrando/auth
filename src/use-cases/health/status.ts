@@ -1,8 +1,8 @@
 import prisma from '../utils/prisma';
 import logger from '@shared/logger';
-import kafkaConfig from '../config/kafka.config';
+import kafkaConfig from '../../config/kafka.config';
 import {createProducer} from '@shared/kafka-manager';
-import * as healthGrpc from '../grpc/generated/common/health';
+import * as healthGrpc from '../../grpc/generated/common/health';
 
 const startedAt = Date.now();
 

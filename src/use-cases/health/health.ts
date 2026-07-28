@@ -1,4 +1,4 @@
-import * as healthGrpc from "../grpc/generated/common/health";
+import * as healthGrpc from "../../grpc/generated/common/health";
 
 export class Health {
     constructor(
