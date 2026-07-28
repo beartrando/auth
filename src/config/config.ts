@@ -1,4 +1,8 @@
 export const config = {
+    appName: process.env.APP_NAME || 'auth',
+    appVersion: process.env.APP_VERSION || '0.0.0',
+    appEnv: process.env.APP_ENV || 'prod',
+
     jwtAccessSecret: process.env.JWT_ACCESS_SECRET ?? (() => {
         throw new Error("JWT_ACCESS_SECRET missing");
     })(),

@@ -41,7 +41,7 @@ export const getUserIdFromGrpcRequest = (
     }
 };
 
-export function createMetadataWithJwt(jwt: string): grpc.Metadata {
+export const createMetadataWithJwt = (jwt: string): grpc.Metadata => {
     const metadata = new grpc.Metadata();
     metadata.add('authorization', 'Bearer ' + jwt);
     return metadata;

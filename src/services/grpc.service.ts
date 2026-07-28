@@ -1,6 +1,7 @@
 import * as grpc from "@grpc/grpc-js";
-import {HealthService} from '../grpc/generated/common/health';
-// import * as authHandler from "../grpc/handlers/auth.handler";
+import * as healthGrpc from '../grpc/generated/common/health';
+import * as authGrpc from '../grpc/generated/auth';
+import * as authHandler from "../grpc/handlers/auth.handler";
 import * as healthHandler from "../grpc/handlers/health.handler";
 import logger from "@shared/logger";
 import config from "../config/config";
@@ -40,22 +41,17 @@ export class GrpcService {
     }
 
     private registerAuthService() {
-        // this.server.addService(AuthService, {
-        //
-        //     register: authHandler.register,
-        //     anonymousSignIn: authHandler.anonymousSignIn,
-        //     get: authHandler.get,
-        //     getMe: authHandler.getMe,
-        //     login: authHandler.login,
-        //     refreshTokens: authHandler.refreshTokens,
-        //     logout: authHandler.logout,
-        //     // forgotPassword: authHandler.forgotPassword,
-        //     // resetPassword: authHandler.resetPassword,
-        // });
+        this.server.addService(authGrpc.AuthService, {
+            anonymousSignIn: authHandler.anonymousSignIn,
+            get: authHandler.get,
+            getMe: authHandler.getMe,
+            refreshTokens: authHandler.refreshTokens,
+            logout: authHandler.logout,
+        });
     }
 
     private registerHealthService() {
-        this.server.addService(HealthService, {
+        this.server.addService(healthGrpc.HealthService, {
             check: healthHandler.check,
             status: healthHandler.status,
             livez: healthHandler.livez,

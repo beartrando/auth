@@ -19,7 +19,6 @@ COPY services/auth/jest.config.js ./services/auth/
 COPY services/auth/tsconfig.json ./services/auth/
 COPY services/auth/src ./services/auth/src/
 COPY services/auth/__tests__ ./services/auth/__tests__/
-COPY services/auth/prisma ./services/auth/prisma/
 
 RUN apt-get update && apt-get install -y protobuf-compiler
 
@@ -32,7 +31,7 @@ FROM base AS deps
 RUN pnpm fetch
 RUN pnpm install --offline --frozen-lockfile
 
-RUN mkdir -p ./services/auth/src/grpc/generated
+RUN mkdir -p ./services/auth/src/infrastructure/grpc/generated
 RUN pnpm --filter auth proto:generate
 
 RUN pnpm --filter auth prisma:generate

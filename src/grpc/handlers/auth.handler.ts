@@ -2,31 +2,14 @@ import * as grpc from '@grpc/grpc-js';
 import * as authGrpc from '../generated/auth';
 import * as responseGrpc from '../generated/common/response';
 import * as emptyGrpc from '../generated/common/empty';
-import * as authService from '../../services/auth.service';
 import {callbackError} from './callback.error';
 import logger from "@shared/logger";
 import {userToGrpc} from "../../utils/grpc-prisma-converters/user";
-import {getUserIdFromGrpcRequest} from "../../utils/grpcRequestMetadata";
-
-export const register = async (
-    call: grpc.ServerUnaryCall<authGrpc.RegisterRequest, authGrpc.AuthObject>,
-    callback: grpc.sendUnaryData<authGrpc.AuthObject>
-) => {
-    throw new Error('Registration is disabled');
-    const {email, password} = call.request;
-
-    try {
-        await authService.create(email, password);
-
-        const result = await authService.login(email, password);
-
-        callback(null, result);
-
-    } catch (err: any) {
-        logger.log(err);
-        callbackError(callback, err);
-    }
-};
+import {getJwtFromGrpcRequest} from "../../utils/grpcRequestMetadata";
+import anonymousSignInUseCase from "../../use-cases/auth/anonymous-sign-in";
+import refreshTokensUseCase from "../../use-cases/auth/refresh-tokens";
+import logoutUseCase from "../../use-cases/auth/logout";
+import getUseCase from "../../use-cases/auth/get";
 
 export const anonymousSignIn = async (
     call: grpc.ServerUnaryCall<authGrpc.AnonymousSignInRequest, authGrpc.AuthObject>,
@@ -35,25 +18,7 @@ export const anonymousSignIn = async (
     try {
         const {deviceId} = call.request;
         // logger.log('anonymousSignIn ' + deviceId);
-        const result = await authService.anonymousSignIn(deviceId);
-
-        callback(null, result);
-
-    } catch (err: any) {
-        logger.log(err);
-        callbackError(callback, err);
-    }
-};
-
-export const login = async (
-    call: grpc.ServerUnaryCall<authGrpc.LoginRequest, authGrpc.AuthObject>,
-    callback: grpc.sendUnaryData<authGrpc.AuthObject>
-) => {
-    throw new Error('Login is disabled');
-    const {email, password} = call.request;
-
-    try {
-        const result = await authService.login(email, password);
+        const result = await anonymousSignInUseCase.execute(deviceId);
 
         callback(null, result);
 
@@ -70,7 +35,7 @@ export const refreshTokens = async (
     const {token} = call.request;
 
     try {
-        const response = await authService.refreshTokens(token);
+        const response = await refreshTokensUseCase.execute(token);
 
         callback(null, response);
 
@@ -84,10 +49,10 @@ export const logout = async (
     call: grpc.ServerUnaryCall<emptyGrpc.Empty, responseGrpc.EmptyResponse>,
     callback: grpc.sendUnaryData<responseGrpc.EmptyResponse>
 ) => {
-    const userId = getUserIdFromGrpcRequest(call);
+    const jwt = getJwtFromGrpcRequest(call);
 
     try {
-        const response = await authService.logout(userId);
+        const response = await logoutUseCase.execute(jwt);
 
         callback(null, response);
 
@@ -104,7 +69,7 @@ export const get = async (
     try {
         const {userId} = call.request;
         // logger.log('anonymousSignIn ' + deviceId);
-        const result = userToGrpc(await authService.get(userId));
+        const result = userToGrpc(await getUseCase.execute(userId));
 
         callback(null, result);
 
@@ -120,8 +85,8 @@ export const getMe = async (
     callback: grpc.sendUnaryData<authGrpc.UserObject>
 ) => {
     try {
-        const userId = getUserIdFromGrpcRequest(call);
-        const result = userToGrpc(await authService.get(userId));
+        const jwt = getJwtFromGrpcRequest(call);
+        const result = userToGrpc(await getMeUseCase.execute(jwt));
 
         callback(null, result);
 
