@@ -4,12 +4,12 @@ import * as responseGrpc from '../generated/common/response';
 import * as emptyGrpc from '../generated/common/empty';
 import {callbackError} from './callback.error';
 import logger from "@shared/logger";
-import {userToGrpc} from "../../utils/grpc-prisma-converters/user";
-import {getJwtFromGrpcRequest} from "../../utils/grpcRequestMetadata";
-import anonymousSignInUseCase from "../../use-cases/auth/anonymous-sign-in";
-import refreshTokensUseCase from "../../use-cases/auth/refresh-tokens";
-import logoutUseCase from "../../use-cases/auth/logout";
-import getUseCase from "../../use-cases/auth/get";
+import {userToGrpc} from "../../../utils/grpc-prisma-converters/user";
+import {getJwtFromGrpcRequest} from "../../../utils/grpcRequestMetadata";
+import anonymousSignInUseCase from "../../../use-cases/auth/anonymous-sign-in";
+import refreshTokensUseCase from "../../../use-cases/auth/refresh-tokens";
+import logoutUseCase from "../../../use-cases/auth/logout";
+import getUseCase from "../../../use-cases/auth/get";
 
 export const anonymousSignIn = async (
     call: grpc.ServerUnaryCall<authGrpc.AnonymousSignInRequest, authGrpc.AuthObject>,

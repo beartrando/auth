@@ -1,4 +1,4 @@
-import {LiveStatus} from "../../grpc/generated/common/health";
+import {LiveStatus} from "../../infrastructure/grpc/generated/common/health";
 import {Prisma} from "@prisma/client";
 import pgBossManager from "@shared/pg-boss-manager";
 import {kafkaProducersConfig} from "../../config/kafka.config";

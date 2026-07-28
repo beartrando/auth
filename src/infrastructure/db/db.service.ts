@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 
-export class PrismaService {
+export class DbService {
     private readonly prisma: PrismaClient;
 
     constructor() {
@@ -27,6 +27,6 @@ export class PrismaService {
     }
 }
 
-export const prismaService = new PrismaService();
+export const dbService = new DbService();
 
-export default prismaService;
+export default dbService;

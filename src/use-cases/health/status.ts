@@ -1,5 +1,5 @@
 import config from "../../config/config";
-import {ServiceStatus} from "../../grpc/generated/common/health";
+import {ServiceStatus} from "../../infrastructure/grpc/generated/common/health";
 
 const startedAt = Date.now();
 

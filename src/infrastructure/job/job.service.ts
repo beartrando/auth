@@ -1,11 +1,11 @@
 import pgBossManager from '@shared/pg-boss-manager';
-import kafkaConfig, {kafkaProducersConfig} from "../config/kafka.config";
-import pgBossConfig from "../config/pg-boss.config";
+import kafkaConfig, {kafkaProducersConfig} from "../../config/kafka.config";
+import pgBossConfig from "../../config/pg-boss.config";
 import logger from "@shared/logger";
-import sleep from "../utils/sleep";
+import sleep from "../../utils/sleep";
 
 
-export class PgBossService {
+export class JobService {
 
     constructor() {
     }
@@ -56,6 +56,6 @@ export class PgBossService {
 
 }
 
-const pgBossService = new PgBossService()
+const jobService = new JobService()
 
-export default pgBossService;
+export default jobService;

@@ -1,4 +1,4 @@
-import * as authGrpc from "../../grpc/generated/auth";
+import * as authGrpc from "../../infrastructure/grpc/generated/auth";
 
 import {User} from "@prisma/client";
 

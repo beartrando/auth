@@ -7,9 +7,9 @@
     "stage": "ts-node-dev --respawn --transpile-only src/app.ts",
     "build": "tsc -p tsconfig.json",
     "proto:generate": "pnpm exec protoc --plugin=protoc-gen-ts_proto=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=src/infrastructure/grpc/generated --ts_proto_opt=outputServices=grpc-js,useExactTypes=false,esModuleInterop=true --proto_path=../../proto/ ../../proto/*.proto ../../proto/**/*.proto",
-    "prisma:generate": "npx prisma generate",
+    "prisma:generate": "npx src/infrastructure/db/prisma generate",
     "start": "node ./dist/app.js",
-    "migrate": "npx prisma migrate dev --name init",
+    "migrate": "npx src/infrastructure/db/prisma migrate dev --name init",
     "test": "jest"
   },
   "devDependencies": {
@@ -44,6 +44,6 @@
     "jsonwebtoken": "^9.0.3"
   },
   "prisma": {
-    "schema": "./src/infrastructure/database/prisma/schema.prisma"
+    "schema": "./src/infrastructure/db/prisma/schema.prisma"
   }
 }

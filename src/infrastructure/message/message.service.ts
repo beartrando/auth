@@ -1,9 +1,9 @@
 import {createConsumer, createProducer, KafkaConfig, KafkaProducer} from "@shared/kafka-manager";
 import logger from "@shared/logger";
-import kafkaConfig, {kafkaConsumersConfig,} from '../config/kafka.config';
-import sleep from "../utils/sleep";
+import kafkaConfig, {kafkaConsumersConfig,} from '../../config/kafka.config';
+import sleep from "../../utils/sleep";
 
-export class KafkaService {
+export class MessageService {
 
     private producer?: KafkaProducer;
 
@@ -77,6 +77,6 @@ export class KafkaService {
     }
 }
 
-const kafkaService = new KafkaService(kafkaConfig);
+const messageService = new MessageService(kafkaConfig);
 
-export default kafkaService;
+export default messageService;

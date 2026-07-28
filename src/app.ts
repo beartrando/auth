@@ -1,5 +1,5 @@
 import logger from '@shared/logger';
-import grpcService from "./services/grpc.service";
+import grpcService from "./infrastructure/grpc/grpc.service";
 import prismaService from "./services/prisma.service";
 import pgBossService from "./services/pg-boss.service";
 import kafkaService from "./services/kafka.service";
