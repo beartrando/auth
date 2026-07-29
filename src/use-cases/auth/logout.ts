@@ -1,15 +1,13 @@
-import {LiveStatus} from "../../infrastructure/grpc/generated/common/health";
+import * as emptyProto from "../../contracts/proto/common/empty";
 
 export class LogoutUseCase {
-    async execute(): Promise<LiveStatus> {
-        // return async (userId: string) => {
+    async execute(jwt: string): Promise<emptyProto.Empty> {
         //     // удаляем все сессии пользователя
         //     await prisma.session.deleteMany({
         //         where: {userId},
         //     });
         //
-        //     return {};
-        // };
+        return {};
     }
 }
 

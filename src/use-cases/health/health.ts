@@ -1,31 +1,31 @@
-import * as healthGrpc from "../../infrastructure/grpc/generated/common/health";
-import kafkaService, {KafkaService} from "../../services/kafka.service";
-import prismaService, {PrismaService} from "../../services/prisma.service";
-import pgBossService, {PgBossService} from "../../services/pg-boss.service";
-import config from "../../config/config";
+import * as healthProto from "../../contracts/proto/common/health";
+import messageService, {MessageService} from "../../infrastructure/message/message.service";
+import dbService, {DbService} from "../../infrastructure/db/db.service";
+import jobService, {JobService} from "../../infrastructure/job/job.service";
+import config from "../../infrastructure/app/config";
 import logger from "@shared/logger";
 
 export class HealthUseCase {
     constructor(
-        private readonly prisma: PrismaService,
-        private readonly kafka: KafkaService,
-        private readonly pgBoss: PgBossService,
+        private readonly dbService: DbService,
+        private readonly messageService: MessageService,
+        private readonly jobService: JobService,
     ) {
     }
 
-    private toHealthStatus(ok: boolean): healthGrpc.HealthStatus {
+    private toHealthStatus(ok: boolean): healthProto.HealthStatus {
         return ok
-            ? healthGrpc.HealthStatus.HEALTH_STATUS_OK
-            : healthGrpc.HealthStatus.HEALTH_STATUS_FAIL;
+            ? healthProto.HealthStatus.HEALTH_STATUS_OK
+            : healthProto.HealthStatus.HEALTH_STATUS_FAIL;
     }
 
-    async execute(): Promise<healthGrpc.HealthReport> {
-        const [pgOk, kafkaOk, pgBossOk] = await Promise.all([this.prisma.check(), this.kafka.check(), this.pgBoss.check()]);
+    async execute(): Promise<healthProto.HealthReport> {
+        const [dbOk, messageOk, jobOk] = await Promise.all([this.dbService.check(), this.messageService.check(), this.jobService.check()]);
 
         const components = {
-            postgres: pgOk,
-            kafka: kafkaOk,
-            pgBoss: pgBossOk,
+            db: dbOk,
+            message: messageOk,
+            job: jobOk,
         };
 
         return {
@@ -44,7 +44,7 @@ export class HealthUseCase {
     }
 }
 
-const healthUseCase = new HealthUseCase(prismaService, kafkaService, pgBossService);
+const healthUseCase = new HealthUseCase(dbService, messageService, jobService);
 
 export default healthUseCase;
 

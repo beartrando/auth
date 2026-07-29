@@ -1,24 +1,27 @@
 import * as grpc from '@grpc/grpc-js';
-import * as authGrpc from '../generated/auth';
-import * as responseGrpc from '../generated/common/response';
-import * as emptyGrpc from '../generated/common/empty';
-import {callbackError} from './callback.error';
+import * as authProto from '../../../contracts/proto/auth';
+import * as responseProto from '../../../contracts/proto/common/response';
+import * as emptyProto from '../../../contracts/proto/common/empty';
+import callbackError from './callback.error';
 import logger from "@shared/logger";
-import {userToGrpc} from "../../../utils/grpc-prisma-converters/user";
-import {getJwtFromGrpcRequest} from "../../../utils/grpcRequestMetadata";
+import {userToProto} from "../../../utils/grpc-prisma-converters/user";
+import {getJwtFromProtoRequest} from "../../../utils/grpc-request-metadata";
 import anonymousSignInUseCase from "../../../use-cases/auth/anonymous-sign-in";
 import refreshTokensUseCase from "../../../use-cases/auth/refresh-tokens";
 import logoutUseCase from "../../../use-cases/auth/logout";
 import getUseCase from "../../../use-cases/auth/get";
+import getMeUseCase from "../../../use-cases/auth/getMe";
 
 export const anonymousSignIn = async (
-    call: grpc.ServerUnaryCall<authGrpc.AnonymousSignInRequest, authGrpc.AuthObject>,
-    callback: grpc.sendUnaryData<authGrpc.AuthObject>
+    call: grpc.ServerUnaryCall<authProto.AnonymousSignInRequest, authProto.AuthResponse>,
+    callback: grpc.sendUnaryData<authProto.AuthResponse>
 ) => {
     try {
         const {deviceId} = call.request;
         // logger.log('anonymousSignIn ' + deviceId);
-        const result = await anonymousSignInUseCase.execute(deviceId);
+        const authObject = await anonymousSignInUseCase.execute(deviceId);
+
+        const result = authProto.AuthResponse.create({auth: authObject})
 
         callback(null, result);
 
@@ -27,71 +30,79 @@ export const anonymousSignIn = async (
         callbackError(callback, err);
     }
 };
-
-export const refreshTokens = async (
-    call: grpc.ServerUnaryCall<authGrpc.RefreshTokensRequest, authGrpc.AuthObject>,
-    callback: grpc.sendUnaryData<authGrpc.AuthObject>
-) => {
-    const {token} = call.request;
-
-    try {
-        const response = await refreshTokensUseCase.execute(token);
-
-        callback(null, response);
-
-    } catch (err: any) {
-        logger.log(err);
-        callbackError(callback, err);
-    }
-};
-
-export const logout = async (
-    call: grpc.ServerUnaryCall<emptyGrpc.Empty, responseGrpc.EmptyResponse>,
-    callback: grpc.sendUnaryData<responseGrpc.EmptyResponse>
-) => {
-    const jwt = getJwtFromGrpcRequest(call);
-
-    try {
-        const response = await logoutUseCase.execute(jwt);
-
-        callback(null, response);
-
-    } catch (err: any) {
-        logger.log(err);
-        callbackError(callback, err);
-    }
-};
-
-export const get = async (
-    call: grpc.ServerUnaryCall<authGrpc.UserIdRequest, authGrpc.UserObject>,
-    callback: grpc.sendUnaryData<authGrpc.UserObject>
-) => {
-    try {
-        const {userId} = call.request;
-        // logger.log('anonymousSignIn ' + deviceId);
-        const result = userToGrpc(await getUseCase.execute(userId));
-
-        callback(null, result);
-
-    } catch (err: any) {
-        logger.log(err);
-        callbackError(callback, err);
-    }
-};
-
-
-export const getMe = async (
-    call: grpc.ServerUnaryCall<authGrpc.UserIdRequest, authGrpc.UserObject>,
-    callback: grpc.sendUnaryData<authGrpc.UserObject>
-) => {
-    try {
-        const jwt = getJwtFromGrpcRequest(call);
-        const result = userToGrpc(await getMeUseCase.execute(jwt));
-
-        callback(null, result);
-
-    } catch (err: any) {
-        logger.log(err);
-        callbackError(callback, err);
-    }
-};
+//
+// export const refreshTokens = async (
+//     call: grpc.ServerUnaryCall<authProto.RefreshTokensRequest, authProto.AuthResponse>,
+//     callback: grpc.sendUnaryData<authProto.AuthResponse>
+// ) => {
+//     const {token} = call.request;
+//
+//     try {
+//         const authObject = await refreshTokensUseCase.execute(token);
+//
+//         const response = authProto.AuthResponse.create({auth: authObject})
+//
+//         callback(null, response);
+//
+//     } catch (err: any) {
+//         logger.log(err);
+//         callbackError(callback, err);
+//     }
+// };
+//
+// export const logout = async (
+//     call: grpc.ServerUnaryCall<emptyProto.Empty, responseProto.EmptyResponse>,
+//     callback: grpc.sendUnaryData<responseProto.EmptyResponse>
+// ) => {
+//     const jwt = getJwtFromProtoRequest(call);
+//
+//     try {
+//         await logoutUseCase.execute(jwt);
+//         const response = responseProto.EmptyResponse.create({success: true});
+//
+//         callback(null, response);
+//
+//     } catch (err: any) {
+//         logger.log(err);
+//         callbackError(callback, err);
+//     }
+// };
+//
+// export const get = async (
+//     call: grpc.ServerUnaryCall<authProto.UserIdRequest, authProto.UserResponse>,
+//     callback: grpc.sendUnaryData<authProto.UserResponse>
+// ) => {
+//     try {
+//         const {userId} = call.request;
+//         const jwt = getJwtFromProtoRequest(call);
+//         // logger.log('anonymousSignIn ' + deviceId);
+//         const userObject = userToProto(await getUseCase.execute(userId, jwt));
+//
+//         const result = authProto.UserResponse.create({user: userObject})
+//
+//         callback(null, result);
+//
+//     } catch (err: any) {
+//         logger.log(err);
+//         callbackError(callback, err);
+//     }
+// };
+//
+//
+// export const getMe = async (
+//     call: grpc.ServerUnaryCall<authProto.UserIdRequest, authProto.UserResponse>,
+//     callback: grpc.sendUnaryData<authProto.UserResponse>
+// ) => {
+//     try {
+//         const jwt = getJwtFromProtoRequest(call);
+//         const userObject = userToProto(await getMeUseCase.execute(jwt));
+//
+//         const result = authProto.UserResponse.create({user: userObject})
+//
+//         callback(null, result);
+//
+//     } catch (err: any) {
+//         logger.log(err);
+//         callbackError(callback, err);
+//     }
+// };

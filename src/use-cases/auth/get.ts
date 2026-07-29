@@ -1,7 +1,7 @@
-import {LiveStatus} from "../../infrastructure/grpc/generated/common/health";
+import * as authProto from "../../contracts/proto/auth";
 
 export class GetUseCase {
-    async execute(): Promise<LiveStatus> {
+    async execute(id: string, jwt: string): Promise<authProto.UserObject> {
         // return async (id: string) => {
         //     const user = await prisma.user.findUnique({
         //         where: {id},

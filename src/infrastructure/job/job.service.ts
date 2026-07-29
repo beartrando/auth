@@ -1,6 +1,6 @@
 import pgBossManager from '@shared/pg-boss-manager';
-import kafkaConfig, {kafkaProducersConfig} from "../../config/kafka.config";
-import pgBossConfig from "../../config/pg-boss.config";
+import config, {kafkaProducersConfig} from "./config";
+import config from "./config";
 import logger from "@shared/logger";
 import sleep from "../../utils/sleep";
 
@@ -12,7 +12,7 @@ export class JobService {
 
     async init(): Promise<void> {
 
-        void pgBossManager.start(pgBossConfig);
+        void pgBossManager.start(config);
 
         await pgBossManager.waitUntilReady();
 
@@ -27,7 +27,7 @@ export class JobService {
                 await Promise.all(
                     topics.map(topic =>
                         pgBossManager.kafka.start(
-                            kafkaConfig,
+                            config,
                             topic,
                         ),
                     ),

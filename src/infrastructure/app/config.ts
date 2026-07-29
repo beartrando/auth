@@ -12,10 +12,9 @@ export const config = {
     appEnv: process.env.APP_ENV ?? 'prod',
 
     jwtAccessSecret: required("JWT_ACCESS_SECRET"),
-    jwtRefreshSecret: process.env.JWT_REFRESH_SECRET!,
+    jwtRefreshSecret: required("JWT_REFRESH_SECRET"),
     accessTokenExpiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN ?? '15m',
     refreshTokenExpiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN ?? '7d',
-    grpcPort: Number(process.env.GRPC_PORT) ?? 50051,
 };
 
 export default config;

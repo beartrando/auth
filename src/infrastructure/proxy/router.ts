@@ -1,4 +1,4 @@
-import * as orchestrationGrpc from '../grpc/generated/orchestration';
+import * as orchestrationProto from '../../contracts/proto/orchestration';
 import './routes/auth.routes';
 import './routes/profile.routes';
 import logger from "@shared/logger";
@@ -24,7 +24,7 @@ export enum HttpMethod {
     DELETE = "DELETE",
 }
 
-export type RouteHandler = (request: orchestrationGrpc.ProxyRequest) => Promise<orchestrationGrpc.ProxyResponse>;
+export type RouteHandler = (request: orchestrationProto.ProxyRequest) => Promise<orchestrationProto.ProxyResponse>;
 
 class Route {
     constructor(
@@ -59,7 +59,7 @@ export class Router {
         this.register(HttpMethod.DELETE, path, handler, authorizationRequired);
     }
 
-    public async handle(request: orchestrationGrpc.ProxyRequest): Promise<orchestrationGrpc.ProxyResponse> {
+    public async handle(request: orchestrationProto.ProxyRequest): Promise<orchestrationProto.ProxyResponse> {
 
         const method = this.parseMethod(request.method);
 

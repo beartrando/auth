@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import config from '../config/config';
+import config from '../infrastructure/app/config';
 import * as grpc from '@grpc/grpc-js';
 import logger from "@shared/logger";
 
@@ -15,7 +15,7 @@ export const getUserIdFromJwt = (token: string): string => {
     return payload.sub;
 };
 
-export const getJwtFromGrpcRequest = (
+export const getJwtFromProtoRequest = (
     call: grpc.ServerUnaryCall<any, any>
 ): string => {
     const authHeader = call.metadata.get('authorization')[0] as string;
@@ -29,12 +29,12 @@ export const getJwtFromGrpcRequest = (
     return authHeader.slice(7);
 };
 
-export const getUserIdFromGrpcRequest = (
+export const getUserIdFromProtoRequest = (
     call: grpc.ServerUnaryCall<any, any>
 ): string => {
 
     try {
-        return getUserIdFromJwt(getJwtFromGrpcRequest(call))
+        return getUserIdFromJwt(getJwtFromProtoRequest(call))
     } catch (e) {
         logger.error('User id cannot be obtained');
         return '';

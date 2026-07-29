@@ -1,8 +1,7 @@
-import {LiveStatus} from "../../infrastructure/grpc/generated/common/health";
+import * as authProto from "../../contracts/proto/auth";
 
 export class RefreshTokensUseCase {
-    async execute(): Promise<LiveStatus> {
-        // return async (token: string) => {
+    async execute(token: string): Promise<authProto.AuthObject> {
         //     const decoded = verifyRefreshToken(token) as any;
         //
         //     // ищем сессию по refreshToken
@@ -31,7 +30,10 @@ export class RefreshTokensUseCase {
         //         accessToken: newAccessToken,
         //         refreshToken: newRefreshToken,
         //     };
-        // };
+        const accessToken = '';
+        const refreshToken = '';
+
+        return authProto.AuthObject.create({accessToken, refreshToken});
     }
 }
 

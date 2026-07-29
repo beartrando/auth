@@ -1,8 +1,8 @@
-import * as authGrpc from "../../infrastructure/grpc/generated/auth";
+import * as authProto from "../../contracts/proto/auth";
 
 import {User} from "@prisma/client";
 
-export function userToGrpc(user: User): authGrpc.UserObject {
+export function userToProto(user: User): authProto.UserObject {
 
     return {
         id: user.id,
@@ -12,7 +12,7 @@ export function userToGrpc(user: User): authGrpc.UserObject {
     };
 }
 
-export function userToPrisma(user: authGrpc.UserObject) {
+export function userToPrisma(user: authProto.UserObject) {
     return {
         id: user.id,
         email: user.email,

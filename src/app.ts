@@ -1,23 +1,23 @@
 import logger from '@shared/logger';
 import grpcService from "./infrastructure/grpc/grpc.service";
-import prismaService from "./services/prisma.service";
-import pgBossService from "./services/pg-boss.service";
-import kafkaService from "./services/kafka.service";
+import dbService from "./infrastructure/db/db.service";
+import jobService from "./infrastructure/job/job.service";
+import messageService from "./infrastructure/message/message.service";
 
 async function bootstrap(): Promise<void> {
 
     try {
         await grpcService.init();
-        await prismaService.init();
-        await pgBossService.init();
-        await kafkaService.init();
+        await dbService.init();
+        await jobService.init();
+        await messageService.init();
 
         logger.info(
             '🚀 Auth service started',
         );
     } catch (err) {
         logger.error(
-            { err },
+            {err},
             '💥 Failed to start Battle',
         );
         process.exit(1);
@@ -31,9 +31,9 @@ async function bootstrap(): Promise<void> {
             );
 
             await grpcService.stop();
-            await prismaService.stop();
-            await pgBossService.stop();
-            await kafkaService.stop();
+            await dbService.stop();
+            await jobService.stop();
+            await messageService.stop();
 
             process.exit(0);
         },
@@ -42,3 +42,4 @@ async function bootstrap(): Promise<void> {
 
 
 bootstrap();
+

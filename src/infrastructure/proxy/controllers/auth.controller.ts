@@ -1,6 +1,6 @@
-import * as orchestrationGrpc from "../../grpc/generated/orchestration";
-import * as authGrpc from "../../grpc/generated/auth";
-import * as errorGrpc from "../../grpc/generated/common/error";
+import * as orchestrationProto from "../../grpc/generated/orchestration";
+import * as authProto from "../../grpc/generated/auth";
+import * as errorProto from "../../grpc/generated/common/error";
 import {response} from "../adapter/response";
 import {getJwtFromProxyRequest} from "../../../utils/proxy-request-metadata";
 import {parseBody} from "../../../utils/parse-body";
@@ -11,18 +11,18 @@ import responseFactory from "../response-factory";
 import refreshTokensUseCase from "../../../use-cases/auth/refresh-tokens";
 
 export async function anonymousSignIn(
-    request: orchestrationGrpc.ProxyRequest,
-): Promise<orchestrationGrpc.ProxyResponse> {
+    request: orchestrationProto.ProxyRequest,
+): Promise<orchestrationProto.ProxyResponse> {
 
-    const {deviceId} = parseBody<authGrpc.AnonymousSignInRequest>(request.body);
+    const {deviceId} = parseBody<authProto.AnonymousSignInRequest>(request.body);
 
     const resp = await anonymousSignInUseCase.execute(deviceId);
 
     if (!resp) {
         return response.ok(
             responseFactory.error(
-                authGrpc.AuthResponse,
-                errorGrpc.ErrorCode.SERVICE_UNAVAILABLE,
+                authProto.AuthResponse,
+                errorProto.ErrorCode.SERVICE_UNAVAILABLE,
                 "Auth service unavailable",
             )
         );
@@ -39,16 +39,16 @@ export async function anonymousSignIn(
 
     return response.ok(
         responseFactory.error(
-            authGrpc.AuthResponse,
-            errorGrpc.ErrorCode.INVALID_RESPONSE,
+            authProto.AuthResponse,
+            errorProto.ErrorCode.INVALID_RESPONSE,
             "Auth service returned invalid response",
         )
     );
 }
 
 export async function getMe(
-    request: orchestrationGrpc.ProxyRequest,
-): Promise<orchestrationGrpc.ProxyResponse> {
+    request: orchestrationProto.ProxyRequest,
+): Promise<orchestrationProto.ProxyResponse> {
 
     const jwt = getJwtFromProxyRequest(request);
 
@@ -57,10 +57,10 @@ export async function getMe(
 }
 
 export async function refreshTokens(
-    request: orchestrationGrpc.ProxyRequest,
-): Promise<orchestrationGrpc.ProxyResponse> {
+    request: orchestrationProto.ProxyRequest,
+): Promise<orchestrationProto.ProxyResponse> {
 
-    const {token} = parseBody<authGrpc.RefreshTokensRequest>(request.body);
+    const {token} = parseBody<authProto.RefreshTokensRequest>(request.body);
 
 
     const resp = response.ok(await refreshTokensUseCase.execute(token));

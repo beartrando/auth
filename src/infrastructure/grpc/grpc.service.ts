@@ -1,10 +1,10 @@
 import * as grpc from "@grpc/grpc-js";
-import * as healthGrpc from './generated/common/health';
-import * as authGrpc from './generated/auth';
+import * as healthProto from '../../contracts/proto/common/health';
+import * as authProto from '../../contracts/proto/auth';
 import * as authHandler from "./handlers/auth.handler";
 import * as healthHandler from "./handlers/health.handler";
 import logger from "@shared/logger";
-import config from "../../config/config";
+import config from "./config";
 
 export class GrpcService {
     private readonly server: grpc.Server;
@@ -41,17 +41,17 @@ export class GrpcService {
     }
 
     private registerAuthService() {
-        this.server.addService(authGrpc.AuthService, {
+        this.server.addService(authProto.AuthService, {
             anonymousSignIn: authHandler.anonymousSignIn,
-            get: authHandler.get,
-            getMe: authHandler.getMe,
-            refreshTokens: authHandler.refreshTokens,
-            logout: authHandler.logout,
+            // get: authHandler.get,
+            // getMe: authHandler.getMe,
+            // refreshTokens: authHandler.refreshTokens,
+            // logout: authHandler.logout,
         });
     }
 
     private registerHealthService() {
-        this.server.addService(healthGrpc.HealthService, {
+        this.server.addService(healthProto.HealthService, {
             check: healthHandler.check,
             status: healthHandler.status,
             livez: healthHandler.livez,
