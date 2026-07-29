@@ -1,4 +1,4 @@
-import config from "../../config/config";
+import config from "../../infrastructure/app/config";
 import {ServiceStatus} from "../../contracts/proto/common/health";
 
 const startedAt = Date.now();
