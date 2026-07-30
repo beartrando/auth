@@ -38,7 +38,7 @@ function buildGrpcService(dbService: DbService, messageService: MessageService, 
 
     const anonymousSignInUseCase = new AnonymousSignInUseCase(userRepository, deviceRepository);
     const getUseCase = new GetUseCase(userRepository);
-    const getMeUseCase = new GetMeUseCase(userRepository);
+    const getMeUseCase = new GetMeUseCase(userRepository, jwtService);
     const logoutUseCase = new LogoutUseCase(jwtService, sessionRepository);
     const refreshTokensUseCase = new RefreshTokensUseCase(jwtService, sessionRepository);
 

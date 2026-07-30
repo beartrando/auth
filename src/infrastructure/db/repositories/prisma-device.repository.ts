@@ -2,9 +2,8 @@ import {PrismaClient} from "@prisma/client";
 
 import DeviceRepository from "../../../domain/repositories/device.repository";
 import DeviceEntity from "../../../domain/entities/device.entity";
-
-import Id from "../../../domain/value-objects/id.vo";
 import DeviceId from "../../../domain/value-objects/device-id.vo";
+import DeviceDbMapper from "../mappers/device.mapper";
 
 export class PrismaDeviceRepository implements DeviceRepository {
 
@@ -27,33 +26,22 @@ export class PrismaDeviceRepository implements DeviceRepository {
             return null;
         }
 
-        return new DeviceEntity(
-            new Id(device.id),
-
-            new Id(device.userId),
-            new DeviceId(device.deviceId),
-
-            device.createdAt,
-        );
+        return DeviceDbMapper.toEntity(device);
     }
 
     async save(
         device: DeviceEntity,
     ): Promise<void> {
 
+        const deviceDb = DeviceDbMapper.toPersistence(device);
+
         await this.prisma.device.upsert({
             where: {
-                id: device.id.value,
+                deviceId: deviceDb.deviceId,
             },
-            create: {
-                id: device.id.value,
-
-                userId: device.userId.value,
-                deviceId: device.deviceId.value,
-            },
+            create: deviceDb,
             update: {
-                userId: device.userId.value,
-                deviceId: device.deviceId.value,
+                userId: deviceDb.userId,
             },
         });
     }

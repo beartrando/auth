@@ -1,12 +1,12 @@
-import Id from "../value-objects/id";
-import Email from "../value-objects/email";
+import Id from "../value-objects/id.vo";
+import Email from "../value-objects/email.vo";
 
 export class UserEntity {
     constructor(
         readonly id: Id,
 
         readonly email: Email | null,
-        readonly passwordHash: string | null,
+        // readonly passwordHash: string | null,
         readonly googleId: string | null,
 
         readonly lastLoginAt: Date | null,

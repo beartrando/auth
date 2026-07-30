@@ -3,8 +3,8 @@ import {PrismaClient} from "@prisma/client";
 import UserRepository from "../../../domain/repositories/user.repository";
 import UserEntity from "../../../domain/entities/user.entity";
 
-import Id from "../../../domain/value-objects/id";
-import Email from "../../../domain/value-objects/email.vo";
+import Id from "../../../domain/value-objects/id.vo";
+import UserDbMapper from "../mappers/user.mapper";
 
 export class PrismaUserRepository implements UserRepository {
 
@@ -27,75 +27,27 @@ export class PrismaUserRepository implements UserRepository {
             return null;
         }
 
-        return new UserEntity(
-            new Id(user.id),
-
-            user.email ? new Email(user.email) : null,
-            user.passwordHash,
-            user.googleId,
-
-            user.lastLoginAt,
-            user.lastActiveAt,
-
-            user.createdAt,
-            user.updatedAt,
-        );
-    }
-
-    async findByEmail(
-        email: Email,
-    ): Promise<UserEntity | null> {
-
-        const user = await this.prisma.user.findUnique({
-            where: {
-                email: email.value,
-            },
-        });
-
-        if (!user) {
-            return null;
-        }
-
-        return new UserEntity(
-            new Id(user.id),
-
-            user.email ? new Email(user.email) : null,
-            user.passwordHash,
-            user.googleId,
-
-            user.lastLoginAt,
-            user.lastActiveAt,
-
-            user.createdAt,
-            user.updatedAt,
-        );
+        return UserDbMapper.toEntity(user);
     }
 
     async save(
         user: UserEntity,
     ): Promise<void> {
 
+        const userDb = UserDbMapper.toPersistence(user);
+
         await this.prisma.user.upsert({
             where: {
-                id: user.id.value,
+                id: userDb.id,
             },
-            create: {
-                id: user.id.value,
-
-                email: user.email?.value ?? null,
-                passwordHash: user.passwordHash,
-                googleId: user.googleId,
-
-                lastLoginAt: user.lastLoginAt,
-                lastActiveAt: user.lastActiveAt,
-            },
+            create: userDb,
             update: {
-                email: user.email?.value ?? null,
-                passwordHash: user.passwordHash,
-                googleId: user.googleId,
+                email: userDb.email,
+                // passwordHash: userDb.passwordHash,
+                googleId: userDb.googleId,
 
-                lastLoginAt: user.lastLoginAt,
-                lastActiveAt: user.lastActiveAt,
+                lastLoginAt: userDb.lastLoginAt,
+                lastActiveAt: userDb.lastActiveAt,
             },
         });
     }

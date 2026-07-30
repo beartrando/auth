@@ -7,10 +7,6 @@ export interface UserRepository {
         id: Id,
     ): Promise<UserEntity | null>;
 
-    findByEmail(
-        email: Email,
-    ): Promise<UserEntity | null>;
-
     save(
         user: UserEntity,
     ): Promise<void>;

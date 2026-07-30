@@ -9,6 +9,7 @@ export class DeviceEntity {
         readonly deviceId: DeviceId,
 
         readonly createdAt: Date,
+        readonly updatedAt: Date,
     ) {
     }
 }

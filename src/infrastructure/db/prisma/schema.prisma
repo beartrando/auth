@@ -39,5 +39,6 @@ model Device {
   user      User     @relation(fields: [userId], references: [id])
   deviceId  String   @unique
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 

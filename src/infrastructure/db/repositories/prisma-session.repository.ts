@@ -3,9 +3,9 @@ import {PrismaClient} from "@prisma/client";
 import SessionRepository from "../../../domain/repositories/session.repository";
 import SessionEntity from "../../../domain/entities/session.entity";
 
-import Id from "../../../domain/value-objects/id";
-import AccessToken from "../../../domain/value-objects/access-token.vo";
+import Id from "../../../domain/value-objects/id.vo";
 import RefreshToken from "../../../domain/value-objects/refresh-token.vo";
+import SessionDbMapper from "../mappers/session.mapper";
 
 export class PrismaSessionRepository implements SessionRepository {
 
@@ -28,38 +28,24 @@ export class PrismaSessionRepository implements SessionRepository {
             return null;
         }
 
-        return new SessionEntity(
-            new Id(session.id),
-
-            new Id(session.userId),
-
-            new AccessToken(session.accessToken),
-            new RefreshToken(session.refreshToken),
-
-            session.createdAt,
-            session.updatedAt,
-        );
+        return SessionDbMapper.toEntity(session);
     }
 
     async save(
         session: SessionEntity,
     ): Promise<void> {
 
+        const sessionDb = SessionDbMapper.toPersistence(session);
+
         await this.prisma.session.upsert({
             where: {
-                id: session.id.value,
+                id: sessionDb.id,
             },
-            create: {
-                id: session.id.value,
-
-                userId: session.userId.value,
-                accessToken: session.accessToken.value,
-                refreshToken: session.refreshToken.value,
-            },
+            create: sessionDb,
             update: {
-                userId: session.userId.value,
-                accessToken: session.accessToken.value,
-                refreshToken: session.refreshToken.value,
+                userId: sessionDb.userId,
+                accessToken: sessionDb.accessToken,
+                refreshToken: sessionDb.refreshToken,
             },
         });
     }
