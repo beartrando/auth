@@ -54,7 +54,7 @@ export const anonymousSignIn = async (
 //     call: grpc.ServerUnaryCall<emptyProto.Empty, responseProto.EmptyResponse>,
 //     callback: grpc.sendUnaryData<responseProto.EmptyResponse>
 // ) => {
-//     const jwt = getJwtFromProtoRequest(call);
+//     const jwt = jwtFromProtoRequest(call);
 //
 //     try {
 //         await logoutUseCase.execute(jwt);
@@ -74,7 +74,7 @@ export const anonymousSignIn = async (
 // ) => {
 //     try {
 //         const {userId} = call.request;
-//         const jwt = getJwtFromProtoRequest(call);
+//         const jwt = jwtFromProtoRequest(call);
 //         // logger.log('anonymousSignIn ' + deviceId);
 //         const userObject = userToProto(await getUseCase.execute(userId, jwt));
 //
@@ -94,7 +94,7 @@ export const anonymousSignIn = async (
 //     callback: grpc.sendUnaryData<authProto.UserResponse>
 // ) => {
 //     try {
-//         const jwt = getJwtFromProtoRequest(call);
+//         const jwt = jwtFromProtoRequest(call);
 //         const userObject = userToProto(await getMeUseCase.execute(jwt));
 //
 //         const result = authProto.UserResponse.create({user: userObject})

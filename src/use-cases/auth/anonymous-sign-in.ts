@@ -1,7 +1,15 @@
 import * as authProto from "../../contracts/proto/auth";
+import prismaDeviceRepository from "../../infrastructure/db/repositories/prisma-device.repository";
 
-export class AnonymousSignInUseCase {
+export default class AnonymousSignInUseCase {
+
+    constructor(
+        private readonly deviceRepository: DeviceRepository,
+    ) {}
+
     async execute(deviceId: string): Promise<authProto.AuthObject> {
+        const device = await prismaDeviceRepository.findByDeviceId(deviceId);
+
         // let device = await prisma.device.findUnique({
         //     where: {deviceId},
         //     include: {user: true},
@@ -53,8 +61,4 @@ export class AnonymousSignInUseCase {
     }
 }
 
-
-const anonymousSignInUseCase = new AnonymousSignInUseCase();
-
-export default anonymousSignInUseCase;
 

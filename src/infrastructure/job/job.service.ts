@@ -37,7 +37,7 @@ export class JobService {
                 return;
             } catch (err) {
                 logger.warn(
-                    { err },
+                    {err},
                     "⏳ Waiting for PgBoss/Kafka bridge initialization...",
                 );
 
@@ -56,6 +56,4 @@ export class JobService {
 
 }
 
-const jobService = new JobService()
-
-export default jobService;
+export default JobService;

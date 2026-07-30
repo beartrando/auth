@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import {PrismaClient} from "@prisma/client";
 
 export class DbService {
     private readonly prisma: PrismaClient;
@@ -7,14 +7,14 @@ export class DbService {
         this.prisma = new PrismaClient();
     }
 
+    get client(): PrismaClient {
+        return this.prisma;
+    }
+
     async init(): Promise<void> {
     }
 
     async stop(): Promise<void> {
-    }
-
-    get client(): PrismaClient {
-        return this.prisma;
     }
 
     async check(): Promise<boolean> {
@@ -27,6 +27,4 @@ export class DbService {
     }
 }
 
-export const dbService = new DbService();
-
-export default dbService;
+export default DbService;

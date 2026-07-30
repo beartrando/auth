@@ -1,6 +1,6 @@
 import {createConsumer, createProducer, KafkaConfig, KafkaProducer} from "@shared/kafka-manager";
 import logger from "@shared/logger";
-import config, {kafkaConsumersConfig,} from './config';
+import {kafkaConsumersConfig,} from './config';
 import sleep from "../../utils/sleep";
 
 export class MessageService {
@@ -9,40 +9,6 @@ export class MessageService {
 
     constructor(private readonly config: KafkaConfig) {
     }
-
-    private async createConsumers(): Promise<void> {
-        const configs = Object.values(kafkaConsumersConfig);
-
-        await Promise.all(
-            configs.map(({ topic, handler }) =>
-                createConsumer(this.config, {
-                    topic,
-                    handler,
-                }),
-            ),
-        );
-    }
-
-    private async retryInit(
-        fn: () => Promise<void>,
-    ): Promise<void> {
-        while (true) {
-            try {
-                await fn();
-
-                logger.info("✅ Kafka initialized");
-                return;
-            } catch (err) {
-                logger.warn(
-                    { err },
-                    "⏳ Waiting for Kafka topics...",
-                );
-
-                await sleep(3000);
-            }
-        }
-    }
-
 
     async init(): Promise<void> {
         await this.retryInit(() => this.createConsumers());
@@ -75,8 +41,39 @@ export class MessageService {
             return false;
         }
     }
+
+    private async createConsumers(): Promise<void> {
+        const configs = Object.values(kafkaConsumersConfig);
+
+        await Promise.all(
+            configs.map(({topic, handler}) =>
+                createConsumer(this.config, {
+                    topic,
+                    handler,
+                }),
+            ),
+        );
+    }
+
+    private async retryInit(
+        fn: () => Promise<void>,
+    ): Promise<void> {
+        while (true) {
+            try {
+                await fn();
+
+                logger.info("✅ Kafka initialized");
+                return;
+            } catch (err) {
+                logger.warn(
+                    {err},
+                    "⏳ Waiting for Kafka topics...",
+                );
+
+                await sleep(3000);
+            }
+        }
+    }
 }
 
-const messageService = new MessageService(config);
-
-export default messageService;
+export default MessageService;

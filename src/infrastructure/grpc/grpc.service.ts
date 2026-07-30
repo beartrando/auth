@@ -2,6 +2,7 @@ import * as grpc from "@grpc/grpc-js";
 import * as healthProto from '../../contracts/proto/common/health';
 import * as authProto from '../../contracts/proto/auth';
 import * as authHandler from "./handlers/auth.handler";
+import {anonymousSignIn} from "./handlers/auth.handler";
 import * as healthHandler from "./handlers/health.handler";
 import logger from "@shared/logger";
 import config from "./config";
@@ -13,10 +14,18 @@ export class GrpcService {
         this.server = new grpc.Server();
     }
 
-    async init(): Promise<void> {
+    async init(
+        {
+            anonymousSignInUseCase,
+        }: {
+            anonymousSignInUseCase: AnonymousSignInUseCase;
+        }
+    ): Promise<void> {
         return new Promise<void>(
             (resolve, reject) => {
-                this.addServices();
+                this.addServices({
+                    anonymousSignInUseCase,
+                });
                 this.server.bindAsync(
                     `0.0.0.0:${this.grpcPort}`,
                     grpc.ServerCredentials.createInsecure(),
@@ -40,9 +49,15 @@ export class GrpcService {
         );
     }
 
-    private registerAuthService() {
+    private registerAuthService(
+        {
+            anonymousSignInUseCase,
+        }: {
+            anonymousSignInUseCase: AnonymousSignInUseCase;
+        }
+    ) {
         this.server.addService(authProto.AuthService, {
-            anonymousSignIn: authHandler.anonymousSignIn,
+            anonymousSignIn: authHandler.anonymousSignIn(anonymousSignIn()),
             // get: authHandler.get,
             // getMe: authHandler.getMe,
             // refreshTokens: authHandler.refreshTokens,
@@ -59,8 +74,16 @@ export class GrpcService {
         });
     }
 
-    private addServices() {
-        this.registerAuthService();
+    private addServices(
+        {
+            anonymousSignInUseCase,
+        }: {
+            anonymousSignInUseCase: AnonymousSignInUseCase;
+        }
+    ) {
+        this.registerAuthService({
+            anonymousSignInUseCase,
+        });
         this.registerHealthService();
     }
 

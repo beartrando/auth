@@ -1,8 +1,8 @@
 import * as authProto from "../../contracts/proto/auth";
-
 import {User} from "@prisma/client";
+import UserEntity from "../../domain/entities/user.entity";
 
-export function userToProto(user: User): authProto.UserObject {
+export function toProto(user: UserEntity): authProto.UserObject {
 
     return {
         id: user.id,
@@ -12,7 +12,7 @@ export function userToProto(user: User): authProto.UserObject {
     };
 }
 
-export function userToPrisma(user: authProto.UserObject) {
+export function toPrisma(user: UserEntity): User {
     return {
         id: user.id,
         email: user.email,
