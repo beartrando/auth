@@ -3,6 +3,7 @@ import {config as kafkaConfig, kafkaProducersConfig} from "../message/config";
 import config from "./config";
 import logger from "@shared/logger";
 import sleep from "../../utils/sleep";
+import {SqlExecutor} from "@shared/pg-boss-manager";
 
 
 export class JobService {
@@ -54,6 +55,17 @@ export class JobService {
 
         return pgBossManager.queue.enqueue(topic, data)
     }
+
+    public async enqueueTx<T extends object>(
+        topic: string,
+        data: T,
+        tx: SqlExecutor,
+    ): Promise<number> {
+        const boss = await pgBossManager.waitUntilReady();
+
+        return pgBossManager.queue.enqueueTx(topic, data, tx)
+    }
+
 
     async stop() {
         return await pgBossManager.stop();

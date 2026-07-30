@@ -32,28 +32,32 @@ export class AnonymousSignInUseCase {
             user = await this.userRepository.findById(device.userId);
         }
 
-        if (!user) {
-            user = UserEntity.create()
-            await this.userRepository.save(user);
-        }
+        const session = await this.dbService.transaction(async (tx) => {
+            if (!user) {
+                user = UserEntity.create()
+                await this.userRepository.save(user);
+            }
 
-        if (!device) {
-            device = DeviceEntity.create({deviceId, userId: user.id})
-            await this.deviceRepository.save(device);
-        }
+            if (!device) {
+                device = DeviceEntity.create({deviceId, userId: user.id})
+                await this.deviceRepository.save(device);
+            }
 
-        this.jobService.enqueue(this.userCreatedTopic, user);
+            const accessToken = this.jwtService.generateAccessToken(user.id);
+            const refreshToken = this.jwtService.generateRefreshToken(user.id);
 
-        const accessToken = this.jwtService.generateAccessToken(user.id);
-        const refreshToken = this.jwtService.generateRefreshToken(user.id);
+            const session = SessionEntity.create({
+                userId: user.id,
+                accessToken,
+                refreshToken,
+            });
 
-        const session = SessionEntity.create({
-            userId: user.id,
-            accessToken,
-            refreshToken,
-        });
+            await this.sessionRepository.save(session);
 
-        await this.sessionRepository.save(session);
+            await this.jobService.enqueueTx(this.userCreatedTopic, user, tx);
+
+            return session;
+        })
 
         return new Auth(session.accessToken, session.refreshToken);
     }
