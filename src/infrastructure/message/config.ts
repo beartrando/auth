@@ -13,8 +13,7 @@ export const kafkaConsumersConfig: Record<string, ConsumerConfig> = {};
 
 
 export const kafkaProducersConfig = {
-    userCreated:
-        process.env.KAFKA_TOPIC_USER_CREATED ?? 'user.created',
+    userCreated: process.env.KAFKA_TOPIC_USER_CREATED ?? 'user.created',
 };
 
 

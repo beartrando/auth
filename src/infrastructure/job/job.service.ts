@@ -46,6 +46,15 @@ export class JobService {
         }
     }
 
+    public async enqueue<T extends object>(
+        topic: string,
+        data: T,
+    ): Promise<number> {
+        const boss = await pgBossManager.waitUntilReady();
+
+        return pgBossManager.queue.enqueue(topic, data)
+    }
+
     async stop() {
         return await pgBossManager.stop();
     }

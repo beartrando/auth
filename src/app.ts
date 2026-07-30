@@ -1,6 +1,6 @@
 import logger from "@shared/logger";
 
-import {config as kafkaConfig} from "./infrastructure/message/config";
+import {config as kafkaConfig, kafkaProducersConfig} from "./infrastructure/message/config";
 import {config as grpcConfig} from "./infrastructure/grpc/config";
 import DbService from "./infrastructure/db/db.service";
 import JobService from "./infrastructure/job/job.service";
@@ -36,7 +36,15 @@ function buildGrpcService(dbService: DbService, messageService: MessageService, 
     const sessionRepository = new PrismaSessionRepository(dbService.client);
 
 
-    const anonymousSignInUseCase = new AnonymousSignInUseCase(userRepository, deviceRepository);
+    const anonymousSignInUseCase = new AnonymousSignInUseCase(
+        userRepository,
+        deviceRepository,
+        sessionRepository,
+        jobService,
+        dbService,
+        jwtService,
+        kafkaProducersConfig.userCreated
+    );
     const getUseCase = new GetUseCase(userRepository);
     const getMeUseCase = new GetMeUseCase(userRepository, jwtService);
     const logoutUseCase = new LogoutUseCase(jwtService, sessionRepository);

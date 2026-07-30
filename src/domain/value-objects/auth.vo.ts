@@ -6,16 +6,6 @@ export class Auth {
         readonly accessToken: AccessToken,
         readonly refreshToken: RefreshToken,
     ) {}
-
-    static create(
-        accessToken: string,
-        refreshToken: string,
-    ): Auth {
-        return new Auth(
-            new AccessToken(accessToken),
-            new RefreshToken(refreshToken),
-        );
-    }
 }
 
 export default Auth;

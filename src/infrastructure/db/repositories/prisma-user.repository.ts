@@ -32,11 +32,11 @@ export class PrismaUserRepository implements UserRepository {
 
     async save(
         user: UserEntity,
-    ): Promise<void> {
+    ): Promise<UserEntity> {
 
         const userDb = UserDbMapper.toPersistence(user);
 
-        await this.prisma.user.upsert({
+        const result = await this.prisma.user.upsert({
             where: {
                 id: userDb.id,
             },
@@ -50,6 +50,8 @@ export class PrismaUserRepository implements UserRepository {
                 lastActiveAt: userDb.lastActiveAt,
             },
         });
+
+        return UserDbMapper.toEntity(result);
     }
 }
 

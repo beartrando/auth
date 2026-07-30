@@ -9,7 +9,7 @@ export interface UserRepository {
 
     save(
         user: UserEntity,
-    ): Promise<void>;
+    ): Promise<UserEntity>;
 }
 
 export default UserRepository;
