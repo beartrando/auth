@@ -14,19 +14,22 @@ import LogoutUseCase from "./application/use-cases/auth/logout";
 import RefreshTokensUseCase from "./application/use-cases/auth/refresh-tokens";
 import PrismaUserRepository from "./infrastructure/db/repositories/prisma-user.repository";
 import PrismaSessionRepository from "./infrastructure/db/repositories/prisma-session.repository";
-import GetMeUseCase from "./application/use-cases/auth/getMe";
+import GetMeUseCase from "./application/use-cases/auth/get-me";
 import HealthUseCase from "./application/use-cases/health/health";
 import StatusUseCase from "./application/use-cases/health/status";
 import LivezUseCase from "./application/use-cases/health/livez";
 import ReadyzUseCase from "./application/use-cases/health/readyz";
 import HealthHandler from "./infrastructure/grpc/handlers/health.handler";
 import AuthHandler from "./infrastructure/grpc/handlers/auth.handler";
+import JwtService from "./infrastructure/auth/jwt-service";
 
 const messageService = new MessageService(kafkaConfig);
 const jobService = new JobService()
 const dbService = new DbService();
 
 function buildGrpcService(dbService: DbService, messageService: MessageService, jobService: JobService) {
+
+    const jwtService = new JwtService();
 
     const deviceRepository = new PrismaDeviceRepository(dbService.client);
     const userRepository = new PrismaUserRepository(dbService.client);
@@ -36,8 +39,8 @@ function buildGrpcService(dbService: DbService, messageService: MessageService, 
     const anonymousSignInUseCase = new AnonymousSignInUseCase(userRepository, deviceRepository);
     const getUseCase = new GetUseCase(userRepository);
     const getMeUseCase = new GetMeUseCase(userRepository);
-    const logoutUseCase = new LogoutUseCase();
-    const refreshTokensUseCase = new RefreshTokensUseCase();
+    const logoutUseCase = new LogoutUseCase(jwtService, sessionRepository);
+    const refreshTokensUseCase = new RefreshTokensUseCase(jwtService, sessionRepository);
 
 
     const healthUseCase = new HealthUseCase(dbService, messageService, jobService);

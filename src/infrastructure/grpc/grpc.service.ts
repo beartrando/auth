@@ -1,5 +1,6 @@
 import * as grpc from "@grpc/grpc-js";
 import * as healthProto from '../../contracts/proto/common/health';
+import * as authProto from '../../contracts/proto/auth';
 import * as orchestrationProto from "../../contracts/proto/orchestration";
 import logger from "@shared/logger";
 import AuthHandler from "./handlers/auth.handler";
@@ -47,18 +48,13 @@ export class GrpcService {
         this.server.forceShutdown();
     }
 
-    private registerOrchestrationService() {
-        this.server.addService(healthProto.HealthService, {
-            anon: this.authHandler.a,
-            status: this.healthHandler.status,
-            livez: this.healthHandler.livez,
-            readyz: this.healthHandler.readyz,
-        });
-
-
-
-        this.server.addService(orchestrationProto.OrchestrationService, {
-            proxy: this.orchestrationHandler.proxy,
+    private registerAuthService() {
+        this.server.addService(authProto.AuthService, {
+            anonymousSignIn: this.authHandler.anonymousSignIn,
+            get: this.authHandler.get,
+            getMe: this.authHandler.getMe,
+            logout: this.authHandler.logout,
+            refreshTokens: this.authHandler.refreshTokens,
         });
     }
 
@@ -72,7 +68,7 @@ export class GrpcService {
     }
 
     private addServices() {
-        this.registerOrchestrationService();
+        this.registerAuthService();
         this.registerHealthService();
     }
 }

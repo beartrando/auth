@@ -25,24 +25,6 @@ export class JwtService implements TokenService {
     private readonly accessSecret: jwt.Secret = config.jwtAccessSecret;
     private readonly refreshSecret: jwt.Secret = config.jwtRefreshSecret;
 
-    userIdFromAccessToken(
-        token: AccessToken,
-    ): Id {
-
-        const payload = this.payload(token.value, this.accessSecret);
-
-        return new Id(payload.sub);
-    }
-
-    userIdFromRefreshToken(
-        token: RefreshToken,
-    ): Id {
-
-        const payload = this.payload(token.value, this.refreshSecret);
-
-        return new Id(payload.sub);
-    }
-
     generateAccessToken(
         userId: Id,
     ): AccessToken {
@@ -73,6 +55,20 @@ export class JwtService implements TokenService {
         );
 
         return new RefreshToken(token);
+    }
+
+
+    verifyAccessToken(
+        token: AccessToken,
+    ): Id {
+        return this.payload(token.value, this.accessSecret);
+    }
+
+
+    verifyRefreshToken(
+        token: RefreshToken,
+    ): Id {
+        return this.payload(token.value, this.refreshSecret);
     }
 
     private payload(

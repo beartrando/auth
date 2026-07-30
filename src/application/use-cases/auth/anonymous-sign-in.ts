@@ -1,17 +1,22 @@
 import * as authProto from "../../../contracts/proto/auth";
-import prismaDeviceRepository from "../../../infrastructure/db/repositories/prisma-device.repository";
 import DeviceRepository from "../../../domain/repositories/device.repository";
 import UserRepository from "../../../domain/repositories/user.repository";
+import DeviceId from "../../../domain/value-objects/device-id.vo";
+import Auth from "../../../domain/value-objects/auth.vo";
+import UserEntity from "../../../domain/entities/user.entity";
+import AccessToken from "../../../domain/value-objects/access-token.vo";
+import RefreshToken from "../../../domain/value-objects/refresh-token.vo";
 
 export class AnonymousSignInUseCase {
 
     constructor(
         private readonly userRepository: UserRepository,
         private readonly deviceRepository: DeviceRepository,
-    ) {}
+    ) {
+    }
 
-    async execute(deviceId: string): Promise<authProto.AuthObject> {
-        const device = await prismaDeviceRepository.findByDeviceId(deviceId);
+    async execute(deviceId: DeviceId): Promise<Auth> {
+        const device = await this.deviceRepository.findByDeviceId(deviceId);
 
         // let device = await prisma.device.findUnique({
         //     where: {deviceId},
@@ -60,7 +65,7 @@ export class AnonymousSignInUseCase {
         const accessToken = '';
         const refreshToken = '';
 
-        return authProto.AuthObject.create({accessToken, refreshToken});
+        return new Auth(new AccessToken(accessToken), new RefreshToken(refreshToken));
     }
 }
 

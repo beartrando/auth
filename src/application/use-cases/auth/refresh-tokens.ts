@@ -1,43 +1,56 @@
-import * as authProto from "../../../contracts/proto/auth";
+import JwtService from "../../../infrastructure/auth/jwt-service";
+import PrismaSessionRepository from "../../../infrastructure/db/repositories/prisma-session.repository";
+
+import RefreshToken from "../../../domain/value-objects/refresh-token.vo";
+import Auth from "../../../domain/value-objects/auth.vo";
 
 export class RefreshTokensUseCase {
-    async execute(token: string): Promise<authProto.AuthObject> {
-        //     const decoded = verifyRefreshToken(token) as any;
-        //
-        //     // ищем сессию по refreshToken
-        //     const session = await prisma.session.findFirst({
-        //         where: {refreshToken: token},
-        //         include: {user: true},
-        //     });
-        //
-        //     if (!session || !session.user || session.user.id !== decoded.userId) {
-        //         throw new Error('Invalid refresh token');
-        //     }
-        //
-        //     const newAccessToken = generateAccessToken(session.user.id);
-        //     const newRefreshToken = generateRefreshToken(session.user.id);
-        //
-        //     // обновляем сессию
-        //     await prisma.session.update({
-        //         where: {id: session.id},
-        //         data: {
-        //             accessToken: newAccessToken,
-        //             refreshToken: newRefreshToken,
-        //         },
-        //     });
-        //
-        //     return {
-        //         accessToken: newAccessToken,
-        //         refreshToken: newRefreshToken,
-        //     };
-        const accessToken = '';
-        const refreshToken = '';
 
-        return authProto.AuthObject.create({accessToken, refreshToken});
+    constructor(
+        private readonly jwtService: JwtService,
+        private readonly sessionRepository: PrismaSessionRepository,
+    ) {
+    }
+
+    async execute(
+        refreshToken: RefreshToken,
+    ): Promise<Auth> {
+
+        const userId = this.jwtService.verifyRefreshToken(
+            refreshToken,
+        );
+
+        const session = await this.sessionRepository.findByRefreshToken(
+            refreshToken,
+        );
+
+        if (
+            !session ||
+            !session.userId.equals(userId)
+        ) {
+            throw new Error("Invalid refresh token");
+        }
+
+        const newAccessToken = this.jwtService.generateAccessToken(
+            userId,
+        );
+
+        const newRefreshToken = this.jwtService.generateRefreshToken(
+            userId,
+        );
+
+        session.accessToken = newAccessToken;
+        session.refreshToken = newRefreshToken;
+
+        await this.sessionRepository.save(
+            session,
+        );
+
+        return new Auth(
+            newAccessToken,
+            newRefreshToken,
+        );
     }
 }
 
-
-
 export default RefreshTokensUseCase;
-

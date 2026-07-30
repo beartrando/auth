@@ -1,5 +1,6 @@
 import * as authProto from "../../../contracts/proto/auth";
 import UserRepository from "../../../domain/repositories/user.repository";
+import UserEntity from "../../../domain/entities/user.entity";
 
 export class GetMeUseCase {
     constructor(
@@ -7,7 +8,7 @@ export class GetMeUseCase {
     ) {
     }
 
-    async execute(jwt: string): Promise<authProto.UserObject> {
+    async execute(jwt: string): Promise<UserEntity> {
         // return async (id: string) => {
         //     const user = await prisma.user.findUnique({
         //         where: {id},
