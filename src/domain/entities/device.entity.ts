@@ -1,5 +1,5 @@
-import Id from "../value-objects/id";
-import DeviceId from "../value-objects/device-id";
+import Id from "../value-objects/id.vo";
+import DeviceId from "../value-objects/device-id.vo";
 
 export class DeviceEntity {
     constructor(

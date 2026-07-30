@@ -1,33 +1,27 @@
 import * as grpc from "@grpc/grpc-js";
 import * as healthProto from '../../contracts/proto/common/health';
-import * as authProto from '../../contracts/proto/auth';
-import * as authHandler from "./handlers/auth.handler";
-import {anonymousSignIn} from "./handlers/auth.handler";
-import * as healthHandler from "./handlers/health.handler";
+import * as orchestrationProto from "../../contracts/proto/orchestration";
 import logger from "@shared/logger";
-import config from "./config";
+import AuthHandler from "./handlers/auth.handler";
+import HealthHandler from "./handlers/health.handler";
 
 export class GrpcService {
     private readonly server: grpc.Server;
 
-    constructor(private readonly grpcPort: number) {
+    constructor(
+        private readonly port: number,
+        private readonly authHandler: AuthHandler,
+        private readonly healthHandler: HealthHandler,
+    ) {
         this.server = new grpc.Server();
     }
 
-    async init(
-        {
-            anonymousSignInUseCase,
-        }: {
-            anonymousSignInUseCase: AnonymousSignInUseCase;
-        }
-    ): Promise<void> {
+    async init(): Promise<void> {
         return new Promise<void>(
             (resolve, reject) => {
-                this.addServices({
-                    anonymousSignInUseCase,
-                });
+                this.addServices();
                 this.server.bindAsync(
-                    `0.0.0.0:${this.grpcPort}`,
+                    `0.0.0.0:${this.port}`,
                     grpc.ServerCredentials.createInsecure(),
                     (err, port) => {
                         if (err) {
@@ -38,7 +32,7 @@ export class GrpcService {
 
                             return reject(err);
                         }
-                        this.server.start();
+
                         logger.info(
                             `🟢 gRPC server started on port ${port}`,
                         );
@@ -49,50 +43,39 @@ export class GrpcService {
         );
     }
 
-    private registerAuthService(
-        {
-            anonymousSignInUseCase,
-        }: {
-            anonymousSignInUseCase: AnonymousSignInUseCase;
-        }
-    ) {
-        this.server.addService(authProto.AuthService, {
-            anonymousSignIn: authHandler.anonymousSignIn(anonymousSignIn()),
-            // get: authHandler.get,
-            // getMe: authHandler.getMe,
-            // refreshTokens: authHandler.refreshTokens,
-            // logout: authHandler.logout,
+    stop() {
+        this.server.forceShutdown();
+    }
+
+    private registerOrchestrationService() {
+        this.server.addService(healthProto.HealthService, {
+            anon: this.authHandler.a,
+            status: this.healthHandler.status,
+            livez: this.healthHandler.livez,
+            readyz: this.healthHandler.readyz,
+        });
+
+
+
+        this.server.addService(orchestrationProto.OrchestrationService, {
+            proxy: this.orchestrationHandler.proxy,
         });
     }
 
     private registerHealthService() {
         this.server.addService(healthProto.HealthService, {
-            check: healthHandler.check,
-            status: healthHandler.status,
-            livez: healthHandler.livez,
-            readyz: healthHandler.readyz,
+            check: this.healthHandler.check,
+            status: this.healthHandler.status,
+            livez: this.healthHandler.livez,
+            readyz: this.healthHandler.readyz,
         });
     }
 
-    private addServices(
-        {
-            anonymousSignInUseCase,
-        }: {
-            anonymousSignInUseCase: AnonymousSignInUseCase;
-        }
-    ) {
-        this.registerAuthService({
-            anonymousSignInUseCase,
-        });
+    private addServices() {
+        this.registerOrchestrationService();
         this.registerHealthService();
-    }
-
-    stop() {
-        this.server.forceShutdown();
     }
 }
 
-export const grpcService = new GrpcService(config.grpcPort);
-
-export default grpcService;
+export default GrpcService;
 

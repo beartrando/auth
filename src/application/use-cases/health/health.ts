@@ -1,9 +1,8 @@
-import * as healthProto from "../../contracts/proto/common/health";
-import messageService, {MessageService} from "../../infrastructure/message/message.service";
-import dbService, {DbService} from "../../infrastructure/db/db.service";
-import jobService, {JobService} from "../../infrastructure/job/job.service";
-import config from "../../infrastructure/app/config";
-import logger from "@shared/logger";
+import * as healthProto from "../../../contracts/proto/common/health";
+import {MessageService} from "../../../infrastructure/message/message.service";
+import {DbService} from "../../../infrastructure/db/db.service";
+import {JobService} from "../../../infrastructure/job/job.service";
+import config from "../../../infrastructure/app/config";
 
 export class HealthUseCase {
     constructor(
@@ -11,12 +10,6 @@ export class HealthUseCase {
         private readonly messageService: MessageService,
         private readonly jobService: JobService,
     ) {
-    }
-
-    private toHealthStatus(ok: boolean): healthProto.HealthStatus {
-        return ok
-            ? healthProto.HealthStatus.HEALTH_STATUS_OK
-            : healthProto.HealthStatus.HEALTH_STATUS_FAIL;
     }
 
     async execute(): Promise<healthProto.HealthReport> {
@@ -42,9 +35,13 @@ export class HealthUseCase {
             timestamp: new Date(),
         };
     }
+
+    private toHealthStatus(ok: boolean): healthProto.HealthStatus {
+        return ok
+            ? healthProto.HealthStatus.HEALTH_STATUS_OK
+            : healthProto.HealthStatus.HEALTH_STATUS_FAIL;
+    }
 }
 
-const healthUseCase = new HealthUseCase(dbService, messageService, jobService);
-
-export default healthUseCase;
+export default HealthUseCase;
 

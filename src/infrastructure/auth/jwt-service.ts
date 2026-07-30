@@ -1,4 +1,4 @@
-import jwt, { SignOptions,JwtPayload } from "jsonwebtoken";
+import jwt, {JwtPayload, SignOptions} from "jsonwebtoken";
 import config from "./config";
 
 import Id from "../../domain/value-objects/id";
@@ -22,11 +22,14 @@ const refreshTokenOptions: SignOptions = {
 
 export class JwtService implements TokenService {
 
+    private readonly accessSecret: jwt.Secret = config.jwtAccessSecret;
+    private readonly refreshSecret: jwt.Secret = config.jwtRefreshSecret;
+
     userIdFromAccessToken(
         token: AccessToken,
     ): Id {
 
-        const payload = this.accessTokenPayload(token};
+        const payload = this.payload(token.value, this.accessSecret);
 
         return new Id(payload.sub);
     }
@@ -35,7 +38,7 @@ export class JwtService implements TokenService {
         token: RefreshToken,
     ): Id {
 
-        const payload = this.refreshTokenPayload(token);
+        const payload = this.payload(token.value, this.refreshSecret);
 
         return new Id(payload.sub);
     }
@@ -46,7 +49,7 @@ export class JwtService implements TokenService {
 
         const token = jwt.sign(
             {},
-            config.jwtAccessSecret,
+            this.accessSecret,
             {
                 ...accessTokenOptions,
                 subject: userId.value,
@@ -62,7 +65,7 @@ export class JwtService implements TokenService {
 
         const token = jwt.sign(
             {},
-            config.jwtRefreshSecret,
+            this.refreshSecret,
             {
                 ...refreshTokenOptions,
                 subject: userId.value,
@@ -72,17 +75,16 @@ export class JwtService implements TokenService {
         return new RefreshToken(token);
     }
 
+    private payload(
+        token: string,
+        secret: jwt.Secret,
+    ): TokenPayload {
+        const payload = jwt.verify(token, secret) as TokenPayload;
 
+        if (!payload.sub) {
+            throw new Error("JWT payload missing sub");
+        }
 
-    accessTokenPayload(token: AccessToken): TokenPayload {
-        const payload = jwt.verify(token, config.jwtAccessSecret) as TokenPayload;
-        if (!payload.sub) throw new Error('Access token missing sub');
-        return payload;
-    }
-
-    refreshTokenPayload(token: RefreshToken): TokenPayload {
-        const payload = jwt.verify(token, config.jwtRefreshSecret) as TokenPayload;
-        if (!payload.sub) throw new Error('Refresh token missing sub');
         return payload;
     }
 }

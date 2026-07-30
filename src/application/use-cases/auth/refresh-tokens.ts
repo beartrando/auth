@@ -1,4 +1,4 @@
-import * as authProto from "../../contracts/proto/auth";
+import * as authProto from "../../../contracts/proto/auth";
 
 export class RefreshTokensUseCase {
     async execute(token: string): Promise<authProto.AuthObject> {
@@ -38,7 +38,6 @@ export class RefreshTokensUseCase {
 }
 
 
-const refreshTokensUseCase = new RefreshTokensUseCase();
 
-export default refreshTokensUseCase;
+export default RefreshTokensUseCase;
 

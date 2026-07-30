@@ -1,9 +1,12 @@
-import * as authProto from "../../contracts/proto/auth";
-import prismaDeviceRepository from "../../infrastructure/db/repositories/prisma-device.repository";
+import * as authProto from "../../../contracts/proto/auth";
+import prismaDeviceRepository from "../../../infrastructure/db/repositories/prisma-device.repository";
+import DeviceRepository from "../../../domain/repositories/device.repository";
+import UserRepository from "../../../domain/repositories/user.repository";
 
-export default class AnonymousSignInUseCase {
+export class AnonymousSignInUseCase {
 
     constructor(
+        private readonly userRepository: UserRepository,
         private readonly deviceRepository: DeviceRepository,
     ) {}
 
@@ -61,4 +64,4 @@ export default class AnonymousSignInUseCase {
     }
 }
 
-
+export default AnonymousSignInUseCase;

@@ -1,4 +1,4 @@
-import * as emptyProto from "../../contracts/proto/common/empty";
+import * as emptyProto from "../../../contracts/proto/common/empty";
 
 export class LogoutUseCase {
     async execute(jwt: string): Promise<emptyProto.Empty> {
@@ -12,7 +12,5 @@ export class LogoutUseCase {
 }
 
 
-const logoutUseCase = new LogoutUseCase();
-
-export default logoutUseCase;
+export default LogoutUseCase;
 

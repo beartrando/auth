@@ -1,10 +1,10 @@
-import config from "../../infrastructure/app/config";
-import {ServiceStatus} from "../../contracts/proto/common/health";
+import * as healthProto from "../../../contracts/proto/common/health";
+import config from "../../../infrastructure/app/config";
 
 const startedAt = Date.now();
 
 export class StatusUseCase {
-    async execute(): Promise<ServiceStatus> {
+    async execute(): Promise<healthProto.ServiceStatus> {
         const uptimeMs = Date.now() - startedAt;
 
         return {
@@ -21,6 +21,5 @@ export class StatusUseCase {
     }
 }
 
-const statusUseCase = new StatusUseCase();
 
-export default statusUseCase;
+export default StatusUseCase;

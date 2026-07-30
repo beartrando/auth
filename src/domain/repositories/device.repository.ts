@@ -7,13 +7,13 @@ export interface DeviceRepository {
         deviceId: DeviceId,
     ): Promise<DeviceEntity | null>;
 
-    findByUserId(
-        userId: Id,
-    ): Promise<DeviceEntity[]>;
+    // findByUserId(
+    //     userId: Id,
+    // ): Promise<DeviceEntity[]>;
 
-    create(
-        device: DeviceEntity,
-    ): Promise<void>;
+    // create(
+    //     device: DeviceEntity,
+    // ): Promise<void>;
 
     save(
         device: DeviceEntity,

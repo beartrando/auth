@@ -3,7 +3,7 @@ import {PrismaClient} from "@prisma/client";
 import DeviceRepository from "../../../domain/repositories/device.repository";
 import DeviceEntity from "../../../domain/entities/device.entity";
 
-import Id from "../../../domain/value-objects/id";
+import Id from "../../../domain/value-objects/id.vo";
 import DeviceId from "../../../domain/value-objects/device-id.vo";
 
 export class PrismaDeviceRepository implements DeviceRepository {

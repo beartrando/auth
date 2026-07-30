@@ -1,36 +1,42 @@
 import * as grpc from '@grpc/grpc-js';
 import * as authProto from '../../../contracts/proto/auth';
-import * as responseProto from '../../../contracts/proto/common/response';
-import * as emptyProto from '../../../contracts/proto/common/empty';
 import callbackError from './callback.error';
 import logger from "@shared/logger";
-import {userToProto} from "../../../utils/grpc-prisma-converters/user";
-import {getJwtFromProtoRequest} from "../../../utils/grpc-request-metadata";
-import anonymousSignInUseCase from "../../../use-cases/auth/anonymous-sign-in";
-import refreshTokensUseCase from "../../../use-cases/auth/refresh-tokens";
-import logoutUseCase from "../../../use-cases/auth/logout";
-import getUseCase from "../../../use-cases/auth/get";
-import getMeUseCase from "../../../use-cases/auth/getMe";
+import AnonymousSignInUseCase from "../../../application/use-cases/auth/anonymous-sign-in";
+import RefreshTokensUseCase from "../../../application/use-cases/auth/refresh-tokens";
+import LogoutUseCase from "../../../application/use-cases/auth/logout";
+import GetMeUseCase from "../../../application/use-cases/auth/getMe";
+import GetUseCase from "../../../application/use-cases/auth/get";
 
-export const anonymousSignIn = async (
-    call: grpc.ServerUnaryCall<authProto.AnonymousSignInRequest, authProto.AuthResponse>,
-    callback: grpc.sendUnaryData<authProto.AuthResponse>
-) => {
-    try {
-        const {deviceId} = call.request;
-        // logger.log('anonymousSignIn ' + deviceId);
-        const authObject = await anonymousSignInUseCase.execute(deviceId);
-
-        const result = authProto.AuthResponse.create({auth: authObject})
-
-        callback(null, result);
-
-    } catch (err: any) {
-        logger.log(err);
-        callbackError(callback, err);
+export class AuthHandler {
+    constructor(
+        private readonly anonymousSignInUseCase: AnonymousSignInUseCase,
+        private readonly refreshTokensUseCase: RefreshTokensUseCase,
+        private readonly logoutUseCase: LogoutUseCase,
+        private readonly getMeUseCase: GetMeUseCase,
+        private readonly getUseCase: GetUseCase,
+    ) {
     }
-};
-//
+
+    async anonymousSignIn(
+        call: grpc.ServerUnaryCall<authProto.AnonymousSignInRequest, authProto.AuthResponse>,
+        callback: grpc.sendUnaryData<authProto.AuthResponse>
+    ) {
+        try {
+            const {deviceId} = call.request;
+            // logger.log('anonymousSignIn ' + deviceId);
+            const authObject = await this.anonymousSignInUseCase.execute(deviceId);
+
+            const result = authProto.AuthResponse.create({auth: authObject})
+
+            callback(null, result);
+
+        } catch (err: any) {
+            logger.log(err);
+            callbackError(callback, err);
+        }
+    }
+
 // export const refreshTokens = async (
 //     call: grpc.ServerUnaryCall<authProto.RefreshTokensRequest, authProto.AuthResponse>,
 //     callback: grpc.sendUnaryData<authProto.AuthResponse>
@@ -106,3 +112,7 @@ export const anonymousSignIn = async (
 //         callbackError(callback, err);
 //     }
 // };
+
+}
+
+export default AuthHandler;

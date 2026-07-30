@@ -1,6 +1,12 @@
-import * as authProto from "../../contracts/proto/auth";
+import * as authProto from "../../../contracts/proto/auth";
+import UserRepository from "../../../domain/repositories/user.repository";
 
 export class GetUseCase {
+    constructor(
+        private readonly userRepository: UserRepository,
+    ) {
+    }
+
     async execute(id: string, jwt: string): Promise<authProto.UserObject> {
         // return async (id: string) => {
         //     const user = await prisma.user.findUnique({
@@ -17,7 +23,5 @@ export class GetUseCase {
 }
 
 
-const getUseCase = new GetUseCase();
-
-export default getUseCase;
+export default GetUseCase;
 
