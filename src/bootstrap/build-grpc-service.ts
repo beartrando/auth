@@ -17,6 +17,7 @@ import LivezUseCase from "../application/use-cases/health/livez";
 import ReadyzUseCase from "../application/use-cases/health/readyz";
 import AuthHandler from "../infrastructure/grpc/handlers/auth.handler";
 import HealthHandler from "../infrastructure/grpc/handlers/health.handler";
+import {config as grpcConfig} from "../infrastructure/grpc/config";
 import GrpcService from "../infrastructure/grpc/grpc.service";
 
 function buildGrpcService(dbService: DbService, messageService: MessageService, jobService: JobService) {
@@ -54,3 +55,5 @@ function buildGrpcService(dbService: DbService, messageService: MessageService, 
     return new GrpcService(grpcConfig.port, authHandler, healthHandler);
 
 }
+
+export default buildGrpcService;

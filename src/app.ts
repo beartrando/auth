@@ -3,6 +3,7 @@ import {config as kafkaConfig} from "./infrastructure/message/config";
 import MessageService from "./infrastructure/message/message.service";
 import JobService from "./infrastructure/job/job.service";
 import DbService from "./infrastructure/db/db.service";
+import buildGrpcService from "./bootstrap/build-grpc-service";
 
 const messageService = new MessageService(kafkaConfig);
 const jobService = new JobService()
