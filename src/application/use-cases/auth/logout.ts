@@ -5,7 +5,7 @@ import Id from "../../../domain/value-objects/id.vo";
 
 export class LogoutUseCase {
     constructor(
-        private readonly jwtService: AuthService,
+        private readonly authService: AuthService,
         private readonly sessionRepository: PrismaSessionRepository,
     ) {
     }
@@ -14,7 +14,7 @@ export class LogoutUseCase {
         accessToken: AccessToken,
     ): Promise<void> {
 
-        const userId: Id = this.jwtService.verifyAccessToken(accessToken);
+        const userId: Id = this.authService.verifyAccessToken(accessToken);
 
         await this.sessionRepository.deleteByUserId(userId);
     }

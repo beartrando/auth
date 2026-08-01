@@ -6,13 +6,13 @@ import AccessToken from "../../../domain/value-objects/access-token.vo";
 export class GetMeUseCase {
     constructor(
         private readonly userRepository: UserRepository,
-        private readonly jwtService: AuthService,
+        private readonly authService: AuthService,
     ) {
     }
 
     async execute(accessToken: AccessToken): Promise<UserEntity> {
 
-        const userId = this.jwtService.verifyAccessToken(accessToken)
+        const userId = this.authService.verifyAccessToken(accessToken)
 
         const user = await this.userRepository.findById(userId);
 

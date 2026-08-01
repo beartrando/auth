@@ -22,7 +22,7 @@ import GrpcService from "../infrastructure/grpc/grpc.service";
 
 function buildGrpcService(dbService: DbService, messageService: MessageService, jobService: JobService) {
 
-    const jwtService = new AuthService();
+    const authService = new AuthService();
 
     const deviceRepository = new PrismaDeviceRepository(dbService.client);
     const userRepository = new PrismaUserRepository(dbService.client);
@@ -35,13 +35,13 @@ function buildGrpcService(dbService: DbService, messageService: MessageService, 
         sessionRepository,
         jobService,
         dbService,
-        jwtService,
+        authService,
         kafkaProducersConfig.userCreated
     );
     const getUseCase = new GetUseCase(userRepository);
-    const getMeUseCase = new GetMeUseCase(userRepository, jwtService);
-    const logoutUseCase = new LogoutUseCase(jwtService, sessionRepository);
-    const refreshTokensUseCase = new RefreshTokensUseCase(jwtService, sessionRepository);
+    const getMeUseCase = new GetMeUseCase(userRepository, authService);
+    const logoutUseCase = new LogoutUseCase(authService, sessionRepository);
+    const refreshTokensUseCase = new RefreshTokensUseCase(authService, sessionRepository);
 
 
     const healthUseCase = new HealthUseCase(dbService, messageService, jobService);

@@ -7,7 +7,7 @@ import Auth from "../../../domain/value-objects/auth.vo";
 export class RefreshTokensUseCase {
 
     constructor(
-        private readonly jwtService: AuthService,
+        private readonly authService: AuthService,
         private readonly sessionRepository: PrismaSessionRepository,
     ) {
     }
@@ -16,7 +16,7 @@ export class RefreshTokensUseCase {
         refreshToken: RefreshToken,
     ): Promise<Auth> {
 
-        const userId = this.jwtService.verifyRefreshToken(
+        const userId = this.authService.verifyRefreshToken(
             refreshToken,
         );
 
@@ -31,11 +31,11 @@ export class RefreshTokensUseCase {
             throw new Error("Invalid refresh token");
         }
 
-        const newAccessToken = this.jwtService.generateAccessToken(
+        const newAccessToken = this.authService.generateAccessToken(
             userId,
         );
 
-        const newRefreshToken = this.jwtService.generateRefreshToken(
+        const newRefreshToken = this.authService.generateRefreshToken(
             userId,
         );
 

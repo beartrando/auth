@@ -18,7 +18,7 @@ export class AnonymousSignInUseCase {
         private readonly sessionRepository: SessionRepository,
         private readonly jobService: JobService,
         private readonly dbService: DbService,
-        private readonly jwtService: AuthService,
+        private readonly authService: AuthService,
         private readonly userCreatedTopic: string,
     ) {
     }
@@ -43,8 +43,8 @@ export class AnonymousSignInUseCase {
                 await this.deviceRepository.save(device);
             }
 
-            const accessToken = this.jwtService.generateAccessToken(user.id);
-            const refreshToken = this.jwtService.generateRefreshToken(user.id);
+            const accessToken = this.authService.generateAccessToken(user.id);
+            const refreshToken = this.authService.generateRefreshToken(user.id);
 
             const session = SessionEntity.create({
                 userId: user.id,
