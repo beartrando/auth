@@ -113,4 +113,4 @@ LABEL org.opencontainers.image.version="$VERSION"
 
 WORKDIR /usr/src/app/services/auth
 
-CMD ["npx", "prisma", "migrate", "deploy", "--schema=src/infrastructure/db/prisma/schema.prisma"]
+CMD ["pnpm", "--filter", "auth", "migrate"]
