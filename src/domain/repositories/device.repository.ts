@@ -1,6 +1,5 @@
 import DeviceEntity from "../entities/device.entity";
 import DeviceId from "../value-objects/device-id.vo";
-import Id from "../value-objects/id";
 
 export interface DeviceRepository {
     findByDeviceId(

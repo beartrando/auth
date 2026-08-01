@@ -17,16 +17,16 @@ export class Email {
         return this.normalized;
     }
 
+    private static isValid(value: string): boolean {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    }
+
     equals(other: Email): boolean {
         return this.value === other.value;
     }
 
     toString(): string {
         return this.value;
-    }
-
-    private static isValid(value: string): boolean {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
     }
 }
 

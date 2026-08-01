@@ -10,17 +10,17 @@ datasource db {
 }
 
 model User {
-  id           String   @id @default(uuid())
-  email        String?  @unique
+  id           String    @id @default(uuid())
+  email        String?   @unique
   passwordHash String?
-  googleId     String?  @unique
+  googleId     String?   @unique
   lastLoginAt  DateTime?
   lastActiveAt DateTime?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
 
-  sessions     Session[]
-  devices      Device[]
+  sessions Session[]
+  devices  Device[]
 }
 
 model Session {
@@ -41,4 +41,3 @@ model Device {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
-

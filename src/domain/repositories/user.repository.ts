@@ -1,6 +1,5 @@
 import UserEntity from "../entities/user.entity";
-import Id from "../value-objects/id";
-import Email from "../value-objects/email.vo";
+import Id from "../value-objects/id.vo";
 
 export interface UserRepository {
     findById(

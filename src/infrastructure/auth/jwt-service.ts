@@ -1,11 +1,11 @@
 import jwt, {JwtPayload, SignOptions} from "jsonwebtoken";
 import config from "./config";
 
-import Id from "../../domain/value-objects/id";
 import AccessToken from "../../domain/value-objects/access-token.vo";
 import RefreshToken from "../../domain/value-objects/refresh-token.vo";
 
 import TokenService from "../../application/ports/token-service.port";
+import Id from "../../domain/value-objects/id.vo";
 
 
 interface TokenPayload extends JwtPayload {
@@ -61,14 +61,18 @@ export class JwtService implements TokenService {
     verifyAccessToken(
         token: AccessToken,
     ): Id {
-        return this.payload(token.value, this.accessSecret);
+        const payload = this.payload(token.value, this.accessSecret);
+
+        return new Id(payload.sub);
     }
 
 
     verifyRefreshToken(
         token: RefreshToken,
     ): Id {
-        return this.payload(token.value, this.refreshSecret);
+        const payload = this.payload(token.value, this.refreshSecret);
+
+        return new Id(payload.sub);
     }
 
     private payload(

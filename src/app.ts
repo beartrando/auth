@@ -56,7 +56,7 @@ function buildGrpcService(dbService: DbService, messageService: MessageService, 
     const livezUseCase = new LivezUseCase;
     const readyzUseCase = new ReadyzUseCase;
 
-    const authHandler = new AuthHandler(anonymousSignInUseCase, refreshTokensUseCase, logoutUseCase, getMeUseCase, getUseCase,);
+    const authHandler = new AuthHandler(anonymousSignInUseCase, refreshTokensUseCase, logoutUseCase, getMeUseCase, getUseCase);
     const healthHandler = new HealthHandler(healthUseCase, statusUseCase, livezUseCase, readyzUseCase);
 
     return new GrpcService(grpcConfig.port, authHandler, healthHandler);

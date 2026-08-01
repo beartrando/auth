@@ -1,5 +1,5 @@
 import SessionEntity from "../entities/session.entity";
-import Id from "../value-objects/id";
+import Id from "../value-objects/id.vo";
 
 export interface SessionRepository {
     // findById(

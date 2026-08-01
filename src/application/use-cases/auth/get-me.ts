@@ -1,4 +1,3 @@
-import * as authProto from "../../../contracts/proto/auth";
 import UserRepository from "../../../domain/repositories/user.repository";
 import UserEntity from "../../../domain/entities/user.entity";
 import JwtService from "../../../infrastructure/auth/jwt-service";
@@ -11,9 +10,9 @@ export class GetMeUseCase {
     ) {
     }
 
-    async execute(jwt: AccessToken): Promise<UserEntity> {
+    async execute(accessToken: AccessToken): Promise<UserEntity> {
 
-        const userId = this.jwtService.verifyAccessToken(jwt)
+        const userId = this.jwtService.verifyAccessToken(accessToken)
 
         const user = await this.userRepository.findById(userId);
 

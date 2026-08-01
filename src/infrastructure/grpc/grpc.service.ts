@@ -1,7 +1,6 @@
 import * as grpc from "@grpc/grpc-js";
 import * as healthProto from '../../contracts/proto/common/health';
 import * as authProto from '../../contracts/proto/auth';
-import * as orchestrationProto from "../../contracts/proto/orchestration";
 import logger from "@shared/logger";
 import AuthHandler from "./handlers/auth.handler";
 import HealthHandler from "./handlers/health.handler";
@@ -47,6 +46,20 @@ export class GrpcService {
     stop() {
         this.server.forceShutdown();
     }
+
+    public getJwtFromRequest = (
+        call: grpc.ServerUnaryCall<any, any>
+    ): string => {
+        const authHeader = call.metadata.get('authorization')[0] as string;
+        // logger.log(authHeader);
+        if (!authHeader?.startsWith('Bearer ')) {
+            // throw new Error('Missing or invalid Authorization header');
+            logger.error('Missing or invalid Authorization header');
+            return '';
+        }
+
+        return authHeader.slice(7);
+    };
 
     private registerAuthService() {
         this.server.addService(authProto.AuthService, {

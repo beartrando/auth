@@ -1,4 +1,4 @@
-import Id from "../../domain/value-objects/id";
+import Id from "../../domain/value-objects/id.vo";
 import AccessToken from "../../domain/value-objects/access-token.vo";
 import RefreshToken from "../../domain/value-objects/refresh-token.vo";
 

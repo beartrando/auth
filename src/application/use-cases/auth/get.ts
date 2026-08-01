@@ -1,6 +1,7 @@
-import * as authProto from "../../../contracts/proto/auth";
 import UserRepository from "../../../domain/repositories/user.repository";
 import UserEntity from "../../../domain/entities/user.entity";
+import Id from "../../../domain/value-objects/id.vo";
+import AccessToken from "../../../domain/value-objects/access-token.vo";
 
 export class GetUseCase {
     constructor(
@@ -8,8 +9,8 @@ export class GetUseCase {
     ) {
     }
 
-    async execute(id: string, jwt: string): Promise<UserEntity> {
-        const user = await this.userRepository.findById(id);
+    async execute(userId: Id, accessToken: AccessToken): Promise<UserEntity> {
+        const user = await this.userRepository.findById(userId);
 
         if (!user) {
             throw new Error("User does not exist");

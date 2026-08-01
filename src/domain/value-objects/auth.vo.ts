@@ -5,7 +5,8 @@ export class Auth {
     constructor(
         readonly accessToken: AccessToken,
         readonly refreshToken: RefreshToken,
-    ) {}
+    ) {
+    }
 }
 
 export default Auth;
