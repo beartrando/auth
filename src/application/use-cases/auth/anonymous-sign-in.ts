@@ -8,7 +8,7 @@ import SessionEntity from "../../../domain/entities/session.entity";
 import DbService from "../../../infrastructure/db/db.service";
 import SessionRepository from "../../../domain/repositories/session.repository";
 import JobService from "../../../infrastructure/job/job.service";
-import JwtService from "../../../infrastructure/auth/jwt-service";
+import AuthService from "../../../infrastructure/auth/auth-service";
 
 export class AnonymousSignInUseCase {
 
@@ -18,7 +18,7 @@ export class AnonymousSignInUseCase {
         private readonly sessionRepository: SessionRepository,
         private readonly jobService: JobService,
         private readonly dbService: DbService,
-        private readonly jwtService: JwtService,
+        private readonly jwtService: AuthService,
         private readonly userCreatedTopic: string,
     ) {
     }

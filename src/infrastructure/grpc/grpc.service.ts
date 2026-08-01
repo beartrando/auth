@@ -47,20 +47,6 @@ export class GrpcService {
         this.server.forceShutdown();
     }
 
-    public getJwtFromRequest = (
-        call: grpc.ServerUnaryCall<any, any>
-    ): string => {
-        const authHeader = call.metadata.get('authorization')[0] as string;
-        // logger.log(authHeader);
-        if (!authHeader?.startsWith('Bearer ')) {
-            // throw new Error('Missing or invalid Authorization header');
-            logger.error('Missing or invalid Authorization header');
-            return '';
-        }
-
-        return authHeader.slice(7);
-    };
-
     private registerAuthService() {
         this.server.addService(authProto.AuthService, {
             anonymousSignIn: this.authHandler.anonymousSignIn,

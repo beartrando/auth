@@ -1,4 +1,4 @@
-import JwtService from "../../../infrastructure/auth/jwt-service";
+import AuthService from "../../../infrastructure/auth/auth-service";
 import PrismaSessionRepository from "../../../infrastructure/db/repositories/prisma-session.repository";
 
 import RefreshToken from "../../../domain/value-objects/refresh-token.vo";
@@ -7,7 +7,7 @@ import Auth from "../../../domain/value-objects/auth.vo";
 export class RefreshTokensUseCase {
 
     constructor(
-        private readonly jwtService: JwtService,
+        private readonly jwtService: AuthService,
         private readonly sessionRepository: PrismaSessionRepository,
     ) {
     }

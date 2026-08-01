@@ -20,7 +20,7 @@ const refreshTokenOptions: SignOptions = {
     expiresIn: config.refreshTokenExpiresIn as any,
 };
 
-export class JwtService implements TokenService {
+export class AuthService implements TokenService {
 
     private readonly accessSecret: jwt.Secret = config.jwtAccessSecret;
     private readonly refreshSecret: jwt.Secret = config.jwtRefreshSecret;
@@ -89,4 +89,4 @@ export class JwtService implements TokenService {
     }
 }
 
-export default JwtService;
+export default AuthService;
