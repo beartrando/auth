@@ -5,11 +5,11 @@ export const config = {
     groupId: process.env.KAFKA_GROUP_ID ?? 'auth-service',
 };
 
-export const kafkaConsumersConfig: Record<string, ConsumerConfig> = {};
+export const messageConsumersConfig: Record<string, string> = {};
 
 
-export const kafkaProducersConfig = {
-    userCreated: process.env.KAFKA_TOPIC_USER_CREATED ?? 'user.created',
+export const messageProducersConfig = {
+    userCreated: process.env.MESSAGE_TOPIC_USER_CREATED ?? 'user.created',
 };
 
 

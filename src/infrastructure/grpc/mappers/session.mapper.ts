@@ -1,5 +1,5 @@
 // import {Session} from "@prisma/client";
-// import ProfileEntity from "../../../domain/entities/user.entity";
+// import BattleEntity from "../../../domain/entities/user.entity";
 // import Id from "../../../domain/value-objects/id.vo";
 // import SessionEntity from "../../../domain/entities/session.entity";
 // import AccessToken from "../../../domain/value-objects/access-token.vo";

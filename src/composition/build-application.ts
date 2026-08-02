@@ -19,13 +19,14 @@ import AuthHandler from "../infrastructure/grpc/handlers/auth.handler";
 import MessageService from "../infrastructure/message/message.service";
 import JobService from "../infrastructure/job/job.service";
 import DbService from "../infrastructure/db/db.service";
-import {config as kafkaConfig, kafkaProducersConfig} from "../infrastructure/message/config";
+import {config as messageConfig, messageConsumersConfig, messageProducersConfig} from "../infrastructure/message/config";
+import {config as jobConfig} from "../infrastructure/job/config";
 
 
 function buildApplication() {
 
-    const messageService = new MessageService(kafkaConfig);
-    const jobService = new JobService(kafkaConfig, kafkaProducersConfig)
+    const messageService = new MessageService(messageConfig, messageConsumersConfig);
+    const jobService = new JobService(jobConfig, messageConfig, messageProducersConfig)
     const dbService = new DbService();
 
     const authService = new AuthService();
@@ -42,7 +43,7 @@ function buildApplication() {
         jobService,
         dbService,
         authService,
-        kafkaProducersConfig.userCreated
+        messageProducersConfig.userCreated
     );
     const getUseCase = new GetUseCase(userRepository);
     const getMeUseCase = new GetMeUseCase(userRepository);
