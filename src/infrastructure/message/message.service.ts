@@ -10,7 +10,7 @@ export class MessageService {
     constructor(private readonly config: KafkaConfig) {
     }
 
-    async init(): Promise<void> {
+    async start(): Promise<void> {
         await this.retryInit(() => this.createConsumers());
     }
 

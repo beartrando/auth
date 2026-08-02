@@ -10,7 +10,7 @@ export class JobService {
     constructor() {
     }
 
-    async init(): Promise<void> {
+    async start(): Promise<void> {
 
         void pgBossManager.start(config);
 
