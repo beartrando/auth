@@ -70,13 +70,8 @@ export class AuthHandler {
         call: grpc.ServerUnaryCall<emptyProto.Empty, responseProto.EmptyResponse>,
         callback: grpc.sendUnaryData<responseProto.EmptyResponse>
     ) {
-        const jwt = AuthHelper.getJwt(call);
-
         try {
-            if (!jwt) {
-                throw new InvalidAuthorizationError();
-            }
-            const accessToken = new AccessToken(jwt);
+            const accessToken = AuthHelper.getAccessToken(call);
             await this.logoutUseCase.execute(accessToken);
             const response = responseProto.EmptyResponse.create({success: true});
 
@@ -94,12 +89,9 @@ export class AuthHandler {
     ) {
         try {
             const {userId} = call.request;
-            const jwt = AuthHelper.getJwt(call);
-            if (!jwt) {
-                throw new InvalidAuthorizationError();
-            }
+            const accessToken = AuthHelper.getAccessToken(call);
             // logger.log('anonymousSignIn ' + deviceId);
-            const userObject = UserGrpcMapper.toGrpc(await this.getUseCase.execute(new Id(userId), new AccessToken(jwt)));
+            const userObject = UserGrpcMapper.toGrpc(await this.getUseCase.execute(new Id(userId), accessToken));
 
             const result = authProto.UserResponse.create({user: userObject})
 
@@ -117,12 +109,9 @@ export class AuthHandler {
         callback: grpc.sendUnaryData<authProto.UserResponse>
     ) {
         try {
-            const jwt = AuthHelper.getJwt(call);
-            if (!jwt) {
-                throw new InvalidAuthorizationError();
-            }
+            const accessToken = AuthHelper.getAccessToken(call);
 
-            const userObject = UserGrpcMapper.toGrpc(await this.getMeUseCase.execute(new AccessToken(jwt)));
+            const userObject = UserGrpcMapper.toGrpc(await this.getMeUseCase.execute(accessToken));
 
             const result = authProto.UserResponse.create({user: userObject})
 

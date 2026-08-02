@@ -4,15 +4,20 @@ import SessionEntity from "../../../domain/entities/session.entity";
 import AccessToken from "../../../domain/value-objects/access-token.vo";
 import RefreshToken from "../../../domain/value-objects/refresh-token.vo";
 
+type SessionSaveData = Omit<
+    Session,
+    "createdAt" | "updatedAt"
+>;
+
 export class SessionDbMapper {
-    static toPersistence(session: SessionEntity): Session {
+    static toPersistence(session: SessionEntity): SessionSaveData {
         return {
             id: session.id.value,
             userId: session.userId.value,
             accessToken: session.accessToken.value,
             refreshToken: session.refreshToken.value,
-            createdAt: session.createdAt,
-            updatedAt: session.updatedAt,
+            // createdAt: session.createdAt,
+            // updatedAt: session.updatedAt,
         };
     }
 

@@ -36,19 +36,17 @@ export class PrismaUserRepository implements UserRepository {
 
         const userDb = UserDbMapper.toPersistence(user);
 
+        const {
+            id,
+            ...update
+        } = userDb;
+
         const result = await this.prisma.user.upsert({
             where: {
                 id: userDb.id,
             },
             create: userDb,
-            update: {
-                email: userDb.email,
-                // passwordHash: userDb.passwordHash,
-                googleId: userDb.googleId,
-
-                lastLoginAt: userDb.lastLoginAt,
-                lastActiveAt: userDb.lastActiveAt,
-            },
+            update,
         });
 
         return UserDbMapper.toEntity(result);

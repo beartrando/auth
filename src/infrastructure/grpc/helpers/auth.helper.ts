@@ -1,19 +1,19 @@
 import * as grpc from '@grpc/grpc-js';
 import logger from "@shared/logger";
+import {InvalidAuthorizationError} from "@shared/errors";
+import AccessToken from "../../../domain/value-objects/access-token.vo";
 
 export class AuthHelper {
-    static getJwt(
+    static getAccessToken(
         call: grpc.ServerUnaryCall<any, any>
-    ): string | null {
+    ): AccessToken {
         const authHeader = call.metadata.get('authorization')[0] as string;
         // logger.log(authHeader);
         if (!authHeader?.startsWith('Bearer ')) {
-            // throw new Error('Missing or invalid Authorization header');
-            logger.error('Missing or invalid Authorization header');
-            return null;
+            throw new InvalidAuthorizationError();
         }
 
-        return authHeader.slice(7);
+        return new AccessToken(authHeader.slice(7));
     };
 
     static getMetadata(jwt: string): grpc.Metadata {

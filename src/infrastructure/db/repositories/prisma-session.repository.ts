@@ -37,16 +37,17 @@ export class PrismaSessionRepository implements SessionRepository {
 
         const sessionDb = SessionDbMapper.toPersistence(session);
 
+        const {
+            id,
+            ...update
+        } = sessionDb;
+
         await this.prisma.session.upsert({
             where: {
                 id: sessionDb.id,
             },
             create: sessionDb,
-            update: {
-                userId: sessionDb.userId,
-                accessToken: sessionDb.accessToken,
-                refreshToken: sessionDb.refreshToken,
-            },
+            update,
         });
     }
 

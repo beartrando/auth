@@ -2,21 +2,9 @@ import SessionEntity from "../entities/session.entity";
 import Id from "../value-objects/id.vo";
 
 export interface SessionRepository {
-    // findById(
-    //     id: Id,
-    // ): Promise<SessionEntity | null>;
-    //
-    // findByUserId(
-    //     userId: Id,
-    // ): Promise<SessionEntity[]>;
+    save(session: SessionEntity): Promise<void>;
 
-    save(
-        session: SessionEntity,
-    ): Promise<void>;
-
-    deleteByUserId(
-        userId: Id,
-    ): Promise<void>;
+    deleteByUserId(userId: Id): Promise<void>;
 }
 
 export default SessionRepository;

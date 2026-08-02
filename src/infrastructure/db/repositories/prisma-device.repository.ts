@@ -35,14 +35,19 @@ export class PrismaDeviceRepository implements DeviceRepository {
 
         const deviceDb = DeviceDbMapper.toPersistence(device);
 
+        const {
+            id,
+            userId,
+            deviceId,
+            ...update
+        } = deviceDb;
+
         await this.prisma.device.upsert({
             where: {
                 deviceId: deviceDb.deviceId,
             },
             create: deviceDb,
-            update: {
-                userId: deviceDb.userId,
-            },
+            update,
         });
     }
 }
