@@ -5,17 +5,13 @@ import Id from "../../../domain/value-objects/id.vo";
 
 export class LogoutUseCase {
     constructor(
-        private readonly authService: AuthService,
         private readonly sessionRepository: PrismaSessionRepository,
     ) {
     }
 
     async execute(
-        accessToken: AccessToken,
+        userId: Id,
     ): Promise<void> {
-
-        const userId: Id = this.authService.verifyAccessToken(accessToken);
-
         await this.sessionRepository.deleteByUserId(userId);
     }
 }

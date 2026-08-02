@@ -17,6 +17,7 @@ import AccessToken from "../../../domain/value-objects/access-token.vo";
 import {InvalidAuthorizationError} from "@shared/errors";
 import Id from "../../../domain/value-objects/id.vo";
 import UserGrpcMapper from "../mappers/user.mapper";
+import AuthService from "../../auth/auth-service";
 
 export class AuthHandler {
     constructor(
@@ -24,7 +25,8 @@ export class AuthHandler {
         private readonly refreshTokensUseCase: RefreshTokensUseCase,
         private readonly logoutUseCase: LogoutUseCase,
         private readonly getMeUseCase: GetMeUseCase,
-        private readonly getUseCase: GetUseCase
+        private readonly getUseCase: GetUseCase,
+        private readonly authService: AuthService
     ) {
     }
 
@@ -54,7 +56,11 @@ export class AuthHandler {
         const {token} = call.request;
 
         try {
-            const authObject = await this.refreshTokensUseCase.execute(new RefreshToken(token));
+            const refreshToken = new RefreshToken(token);
+
+            const userId = this.authService.verifyRefreshToken(refreshToken);
+
+            const authObject = await this.refreshTokensUseCase.execute(userId, refreshToken);
 
             const response = authProto.AuthResponse.create({auth: AuthGrpcMapper.toGrpc(authObject)})
 
@@ -72,7 +78,10 @@ export class AuthHandler {
     ) {
         try {
             const accessToken = AuthHelper.getAccessToken(call);
-            await this.logoutUseCase.execute(accessToken);
+
+            const userId = this.authService.verifyAccessToken(accessToken)
+
+            await this.logoutUseCase.execute(userId);
             const response = responseProto.EmptyResponse.create({success: true});
 
             callback(null, response);
@@ -91,7 +100,7 @@ export class AuthHandler {
             const {userId} = call.request;
             const accessToken = AuthHelper.getAccessToken(call);
             // logger.log('anonymousSignIn ' + deviceId);
-            const userObject = UserGrpcMapper.toGrpc(await this.getUseCase.execute(new Id(userId), accessToken));
+            const userObject = UserGrpcMapper.toGrpc(await this.getUseCase.execute(new Id(userId)));
 
             const result = authProto.UserResponse.create({user: userObject})
 
@@ -111,7 +120,9 @@ export class AuthHandler {
         try {
             const accessToken = AuthHelper.getAccessToken(call);
 
-            const userObject = UserGrpcMapper.toGrpc(await this.getMeUseCase.execute(accessToken));
+            const userId = this.authService.verifyAccessToken(accessToken)
+
+            const userObject = UserGrpcMapper.toGrpc(await this.getMeUseCase.execute(userId));
 
             const result = authProto.UserResponse.create({user: userObject})
 

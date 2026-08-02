@@ -39,8 +39,8 @@ function buildGrpcService(dbService: DbService, messageService: MessageService, 
         kafkaProducersConfig.userCreated
     );
     const getUseCase = new GetUseCase(userRepository);
-    const getMeUseCase = new GetMeUseCase(userRepository, authService);
-    const logoutUseCase = new LogoutUseCase(authService, sessionRepository);
+    const getMeUseCase = new GetMeUseCase(userRepository);
+    const logoutUseCase = new LogoutUseCase(sessionRepository);
     const refreshTokensUseCase = new RefreshTokensUseCase(authService, sessionRepository);
 
 
@@ -49,7 +49,15 @@ function buildGrpcService(dbService: DbService, messageService: MessageService, 
     const livezUseCase = new LivezUseCase;
     const readyzUseCase = new ReadyzUseCase;
 
-    const authHandler = new AuthHandler(anonymousSignInUseCase, refreshTokensUseCase, logoutUseCase, getMeUseCase, getUseCase);
+    const authHandler = new AuthHandler(
+        anonymousSignInUseCase,
+        refreshTokensUseCase,
+        logoutUseCase,
+        getMeUseCase,
+        getUseCase,
+        authService
+    );
+
     const healthHandler = new HealthHandler(healthUseCase, statusUseCase, livezUseCase, readyzUseCase);
 
     return new GrpcService(grpcConfig.port, authHandler, healthHandler);

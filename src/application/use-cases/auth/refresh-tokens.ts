@@ -3,6 +3,7 @@ import PrismaSessionRepository from "../../../infrastructure/db/repositories/pri
 
 import RefreshToken from "../../../domain/value-objects/refresh-token.vo";
 import Auth from "../../../domain/value-objects/auth.vo";
+import Id from "../../../domain/value-objects/id.vo";
 
 export class RefreshTokensUseCase {
 
@@ -13,12 +14,9 @@ export class RefreshTokensUseCase {
     }
 
     async execute(
+        userId: Id,
         refreshToken: RefreshToken,
     ): Promise<Auth> {
-
-        const userId = this.authService.verifyRefreshToken(
-            refreshToken,
-        );
 
         const session = await this.sessionRepository.findByRefreshToken(
             refreshToken,

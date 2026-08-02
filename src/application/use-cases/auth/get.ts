@@ -9,7 +9,7 @@ export class GetUseCase {
     ) {
     }
 
-    async execute(userId: Id, accessToken: AccessToken): Promise<UserEntity> {
+    async execute(userId: Id): Promise<UserEntity> {
         const user = await this.userRepository.findById(userId);
 
         if (!user) {
