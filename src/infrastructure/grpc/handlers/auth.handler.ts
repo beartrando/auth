@@ -10,13 +10,13 @@ import LogoutUseCase from "../../../application/use-cases/auth/logout";
 import GetMeUseCase from "../../../application/use-cases/auth/get-me";
 import GetUseCase from "../../../application/use-cases/auth/get";
 import DeviceId from "../../../domain/value-objects/device-id.vo";
-import AuthGrpcMapper from "../mappers/auth.vo.mapper";
+import AuthProtoMapper from "../mappers/auth.proto.mapper";
 import RefreshToken from "../../../domain/value-objects/refresh-token.vo";
 import AuthHelper from "../helpers/auth.helper";
 import AccessToken from "../../../domain/value-objects/access-token.vo";
 import {InvalidAuthorizationError} from "@shared/errors";
 import Id from "../../../domain/value-objects/id.vo";
-import UserGrpcMapper from "../mappers/user.mapper";
+import UserProtoMapper from "../mappers/user.proto.mapper";
 import AuthService from "../../auth/auth-service";
 
 export class AuthHandler {
@@ -39,7 +39,7 @@ export class AuthHandler {
             // logger.log('anonymousSignIn ' + deviceId);
             const session = await this.anonymousSignInUseCase.execute(new DeviceId(deviceId));
 
-            const result = authProto.AuthResponse.create({auth: AuthGrpcMapper.toGrpc(session)});
+            const result = authProto.AuthResponse.create({auth: AuthProtoMapper.toProto(session)});
 
             callback(null, result);
 
@@ -62,7 +62,7 @@ export class AuthHandler {
 
             const authObject = await this.refreshTokensUseCase.execute(userId, refreshToken);
 
-            const response = authProto.AuthResponse.create({auth: AuthGrpcMapper.toGrpc(authObject)})
+            const response = authProto.AuthResponse.create({auth: AuthProtoMapper.toProto(authObject)})
 
             callback(null, response);
 
@@ -100,7 +100,7 @@ export class AuthHandler {
             const {userId} = call.request;
             const accessToken = AuthHelper.getAccessToken(call);
             // logger.log('anonymousSignIn ' + deviceId);
-            const userObject = UserGrpcMapper.toGrpc(await this.getUseCase.execute(new Id(userId)));
+            const userObject = UserProtoMapper.toProto(await this.getUseCase.execute(new Id(userId)));
 
             const result = authProto.UserResponse.create({user: userObject})
 
@@ -122,7 +122,7 @@ export class AuthHandler {
 
             const userId = this.authService.verifyAccessToken(accessToken)
 
-            const userObject = UserGrpcMapper.toGrpc(await this.getMeUseCase.execute(userId));
+            const userObject = UserProtoMapper.toProto(await this.getMeUseCase.execute(userId));
 
             const result = authProto.UserResponse.create({user: userObject})
 

@@ -3,8 +3,8 @@ import UserEntity from "../../../domain/entities/user.entity";
 import Email from "../../../domain/value-objects/email.vo";
 import Id from "../../../domain/value-objects/id.vo";
 
-export class UserGrpcMapper {
-    static toGrpc(user: UserEntity): authProto.UserObject {
+export class UserProtoMapper {
+    static toProto(user: UserEntity): authProto.UserObject {
 
         return authProto.UserObject.create({
             id: user.id.value,
@@ -32,4 +32,4 @@ export class UserGrpcMapper {
 
 }
 
-export default UserGrpcMapper;
+export default UserProtoMapper;
