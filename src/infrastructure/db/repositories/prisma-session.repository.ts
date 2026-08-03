@@ -28,7 +28,7 @@ export class PrismaSessionRepository implements SessionRepository {
             return null;
         }
 
-        return SessionDbMapper.toEntity(session);
+        return SessionDbMapper.toDomain(session);
     }
 
     async save(

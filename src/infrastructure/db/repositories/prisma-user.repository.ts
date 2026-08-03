@@ -27,7 +27,7 @@ export class PrismaUserRepository implements UserRepository {
             return null;
         }
 
-        return UserDbMapper.toEntity(user);
+        return UserDbMapper.toDomain(user);
     }
 
     async save(
@@ -49,7 +49,7 @@ export class PrismaUserRepository implements UserRepository {
             update,
         });
 
-        return UserDbMapper.toEntity(result);
+        return UserDbMapper.toDomain(result);
     }
 }
 

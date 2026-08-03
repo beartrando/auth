@@ -4,7 +4,7 @@ import AccessToken from "../../../domain/value-objects/access-token.vo";
 import RefreshToken from "../../../domain/value-objects/refresh-token.vo";
 
 export class AuthDbMapper {
-    static toEntity(session: Session): Auth {
+    static toDomain(session: Session): Auth {
         return new Auth(
             new AccessToken(session.accessToken),
             new RefreshToken(session.refreshToken),

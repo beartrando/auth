@@ -26,7 +26,7 @@ export class PrismaDeviceRepository implements DeviceRepository {
             return null;
         }
 
-        return DeviceDbMapper.toEntity(device);
+        return DeviceDbMapper.toDomain(device);
     }
 
     async save(

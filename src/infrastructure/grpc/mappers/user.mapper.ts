@@ -17,7 +17,7 @@ export class UserGrpcMapper {
         });
     }
 
-    static toEntity(user: authProto.UserObject): UserEntity {
+    static toDomain(user: authProto.UserObject): UserEntity {
 
         return UserEntity.create({
             id: new Id(user.id),

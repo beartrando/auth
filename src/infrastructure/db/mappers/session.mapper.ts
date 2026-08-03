@@ -21,7 +21,7 @@ export class SessionDbMapper {
         };
     }
 
-    static toEntity(session: Session): SessionEntity {
+    static toDomain(session: Session): SessionEntity {
         return new SessionEntity(
             new Id(session.id),
 

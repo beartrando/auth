@@ -23,7 +23,7 @@ export class UserDbMapper {
         };
     }
 
-    static toEntity(user: User): UserEntity {
+    static toDomain(user: User): UserEntity {
         return new UserEntity(
             new Id(user.id),
             user.email ? new Email(user.email) : null,

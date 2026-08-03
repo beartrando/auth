@@ -19,7 +19,7 @@ export class DeviceDbMapper {
         };
     }
 
-    static toEntity(device: Device): DeviceEntity {
+    static toDomain(device: Device): DeviceEntity {
         return new DeviceEntity(
             new Id(device.id),
             new Id(device.userId),
