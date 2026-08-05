@@ -5,10 +5,10 @@ import Auth from "../../../domain/value-objects/auth.vo";
 import UserEntity from "../../../domain/entities/user.entity";
 import DeviceEntity from "../../../domain/entities/device.entity";
 import SessionEntity from "../../../domain/entities/session.entity";
-import DbService from "../../../infrastructure/db/db.service";
+import DbService from "../../../infrastructure/db/service";
 import SessionRepository from "../../../domain/repositories/session.repository";
-import JobService from "../../../infrastructure/job/job.service";
-import AuthService from "../../../infrastructure/auth/auth-service";
+import JobService from "../../../infrastructure/job/service";
+import AuthService from "../../../infrastructure/auth/service";
 
 export class AnonymousSignInUseCase {
 

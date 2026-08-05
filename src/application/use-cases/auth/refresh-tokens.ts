@@ -1,4 +1,4 @@
-import AuthService from "../../../infrastructure/auth/auth-service";
+import AuthService from "../../../infrastructure/auth/service";
 import PrismaSessionRepository from "../../../infrastructure/db/repositories/prisma-session.repository";
 
 import RefreshToken from "../../../domain/value-objects/refresh-token.vo";

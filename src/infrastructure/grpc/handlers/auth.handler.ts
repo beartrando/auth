@@ -17,7 +17,7 @@ import AccessToken from "../../../domain/value-objects/access-token.vo";
 import {InvalidAuthorizationError} from "@shared/errors";
 import Id from "../../../domain/value-objects/id.vo";
 import UserProtoMapper from "../mappers/user.proto.mapper";
-import AuthService from "../../auth/auth-service";
+import AuthService from "../../auth/service";
 
 export class AuthHandler {
     constructor(
