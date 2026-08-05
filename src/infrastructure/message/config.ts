@@ -8,7 +8,7 @@ export const config = {
 export const messageConsumersConfig: Record<string, string> = {};
 
 
-export const messageProducersConfig = {
+export const messageProducersConfig: Record<string, string> = {
     userCreated: process.env.MESSAGE_TOPIC_USER_CREATED ?? 'user.created',
 };
 
