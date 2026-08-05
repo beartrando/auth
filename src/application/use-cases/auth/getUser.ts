@@ -1,9 +1,8 @@
 import UserRepository from "../../../domain/repositories/user.repository";
 import UserEntity from "../../../domain/entities/user.entity";
 import Id from "../../../domain/value-objects/id.vo";
-import AccessToken from "../../../domain/value-objects/access-token.vo";
 
-export class GetUseCase {
+export class GetUserUseCase {
     constructor(
         private readonly userRepository: UserRepository,
     ) {
@@ -21,5 +20,5 @@ export class GetUseCase {
 }
 
 
-export default GetUseCase;
+export default GetUserUseCase;
 

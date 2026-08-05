@@ -1,6 +1,6 @@
 // import {Session} from "@prisma/client";
 // import BattleEntity from "../../../domain/entities/user.entity";
-// import Id from "../../../domain/value-objects/id.vo";
+// import DeviceId from "../../../domain/value-objects/id.vo";
 // import SessionEntity from "../../../domain/entities/session.entity";
 // import AccessToken from "../../../domain/value-objects/access-token.vo";
 // import RefreshToken from "../../../domain/value-objects/refresh-token.vo";
@@ -19,9 +19,9 @@
 //
 //     static from(session: Session): SessionEntity {
 //         return new SessionEntity(
-//             new Id(session.id),
+//             new DeviceId(session.id),
 //
-//             new Id(session.userId),
+//             new DeviceId(session.userId),
 //
 //             new AccessToken(session.accessToken),
 //             new RefreshToken(session.refreshToken),

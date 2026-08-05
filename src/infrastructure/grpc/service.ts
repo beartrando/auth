@@ -51,7 +51,6 @@ export class GrpcService {
         this.server.addService(authProto.AuthService, {
             anonymousSignIn: this.authHandler.anonymousSignIn,
             get: this.authHandler.get,
-            getMe: this.authHandler.getMe,
             logout: this.authHandler.logout,
             refreshTokens: this.authHandler.refreshTokens,
         });

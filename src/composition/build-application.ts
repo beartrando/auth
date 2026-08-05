@@ -1,5 +1,4 @@
 import AnonymousSignInUseCase from "../application/use-cases/auth/anonymous-sign-in";
-import GetMeUseCase from "../application/use-cases/auth/get-me";
 import LogoutUseCase from "../application/use-cases/auth/logout";
 import RefreshTokensUseCase from "../application/use-cases/auth/refresh-tokens";
 import HealthUseCase from "../application/use-cases/health/health";
@@ -14,12 +13,16 @@ import AuthService from "../infrastructure/auth/service";
 import PrismaDeviceRepository from "../infrastructure/db/repositories/prisma-device.repository";
 import PrismaUserRepository from "../infrastructure/db/repositories/prisma-user.repository";
 import PrismaSessionRepository from "../infrastructure/db/repositories/prisma-session.repository";
-import GetUseCase from "../application/use-cases/auth/get";
+import GetUserUseCase from "../application/use-cases/auth/getUser";
 import AuthHandler from "../infrastructure/grpc/handlers/auth.handler";
 import MessageService from "../infrastructure/message/service";
 import JobService from "../infrastructure/job/service";
 import DbService from "../infrastructure/db/service";
-import {config as messageConfig, messageConsumersConfig, messageProducersConfig} from "../infrastructure/message/config";
+import {
+    config as messageConfig,
+    messageConsumersConfig,
+    messageProducersConfig
+} from "../infrastructure/message/config";
 import {config as jobConfig} from "../infrastructure/job/config";
 import {config as authConfig} from "../infrastructure/auth/config";
 
@@ -46,8 +49,7 @@ function buildApplication() {
         authService,
         messageProducersConfig.userCreated
     );
-    const getUseCase = new GetUseCase(userRepository);
-    const getMeUseCase = new GetMeUseCase(userRepository);
+    const getUseCase = new GetUserUseCase(userRepository);
     const logoutUseCase = new LogoutUseCase(sessionRepository);
     const refreshTokensUseCase = new RefreshTokensUseCase(authService, sessionRepository);
 
@@ -61,7 +63,6 @@ function buildApplication() {
         anonymousSignInUseCase,
         refreshTokensUseCase,
         logoutUseCase,
-        getMeUseCase,
         getUseCase,
         authService
     );

@@ -19,7 +19,8 @@ export interface AuthConfig {
 }
 
 export class AuthService implements TokenService {
-    constructor(private readonly config: AuthConfig) {}
+    constructor(private readonly config: AuthConfig) {
+    }
 
     generateAccessToken(userId: Id): AccessToken {
         const token = jwt.sign(

@@ -1,5 +1,4 @@
 import * as grpc from '@grpc/grpc-js';
-import logger from "@shared/logger";
 import {InvalidAuthorizationError} from "@shared/errors";
 import AccessToken from "../../../domain/value-objects/access-token.vo";
 

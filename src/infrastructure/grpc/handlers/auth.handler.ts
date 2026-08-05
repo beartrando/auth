@@ -7,14 +7,11 @@ import logger from "@shared/logger";
 import AnonymousSignInUseCase from "../../../application/use-cases/auth/anonymous-sign-in";
 import RefreshTokensUseCase from "../../../application/use-cases/auth/refresh-tokens";
 import LogoutUseCase from "../../../application/use-cases/auth/logout";
-import GetMeUseCase from "../../../application/use-cases/auth/get-me";
-import GetUseCase from "../../../application/use-cases/auth/get";
+import GetUserUseCase from "../../../application/use-cases/auth/getUser";
 import DeviceId from "../../../domain/value-objects/device-id.vo";
 import AuthProtoMapper from "../mappers/auth.proto.mapper";
 import RefreshToken from "../../../domain/value-objects/refresh-token.vo";
 import AuthHelper from "../helpers/auth.helper";
-import AccessToken from "../../../domain/value-objects/access-token.vo";
-import {InvalidAuthorizationError} from "@shared/errors";
 import Id from "../../../domain/value-objects/id.vo";
 import UserProtoMapper from "../mappers/user.proto.mapper";
 import AuthService from "../../auth/service";
@@ -24,8 +21,7 @@ export class AuthHandler {
         private readonly anonymousSignInUseCase: AnonymousSignInUseCase,
         private readonly refreshTokensUseCase: RefreshTokensUseCase,
         private readonly logoutUseCase: LogoutUseCase,
-        private readonly getMeUseCase: GetMeUseCase,
-        private readonly getUseCase: GetUseCase,
+        private readonly getUseCase: GetUserUseCase,
         private readonly authService: AuthService
     ) {
     }
@@ -111,29 +107,6 @@ export class AuthHandler {
             callbackError(callback, err);
         }
     };
-
-
-    async getMe(
-        call: grpc.ServerUnaryCall<authProto.UserIdRequest, authProto.UserResponse>,
-        callback: grpc.sendUnaryData<authProto.UserResponse>
-    ) {
-        try {
-            const accessToken = AuthHelper.getAccessToken(call);
-
-            const userId = this.authService.verifyAccessToken(accessToken)
-
-            const userObject = UserProtoMapper.toProto(await this.getMeUseCase.execute(userId));
-
-            const result = authProto.UserResponse.create({user: userObject})
-
-            callback(null, result);
-
-        } catch (err: any) {
-            logger.log(err);
-            callbackError(callback, err);
-        }
-    };
-
 }
 
 export default AuthHandler;

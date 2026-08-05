@@ -1,4 +1,4 @@
-import {createConsumer, createProducer, KafkaConfig, KafkaProducer} from "@shared/kafka-manager";
+import {createProducer, KafkaConfig, KafkaProducer} from "@shared/kafka-manager";
 import logger from "@shared/logger";
 import sleep from "../../utils/sleep";
 
