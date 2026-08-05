@@ -11,12 +11,12 @@ function required(name: string): string {
     return value;
 }
 
-export const config: AuthConfig = {
+export const authConfig: AuthConfig = {
     accessSecret: required("ACCESS_SECRET"),
     refreshSecret: required("REFRESH_SECRET"),
     accessTokenExpiresIn: (process.env.ACCESS_TOKEN_EXPIRES_IN ?? '15m') as SignOptions["expiresIn"],
     refreshTokenExpiresIn: (process.env.REFRESH_TOKEN_EXPIRES_IN ?? '7d') as SignOptions["expiresIn"],
 };
 
-export default config;
+export default authConfig;
 

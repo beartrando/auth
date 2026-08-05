@@ -7,7 +7,7 @@ import LivezUseCase from "../application/use-cases/health/livez";
 import ReadyzUseCase from "../application/use-cases/health/readyz";
 import HealthHandler from "../infrastructure/grpc/handlers/health.handler";
 import GrpcService from "../infrastructure/grpc/service";
-import {config as grpcConfig} from "../infrastructure/grpc/config";
+import grpcConfig from "../infrastructure/grpc/config";
 import Application from "../application/application";
 import AuthService from "../infrastructure/auth/service";
 import PrismaDeviceRepository from "../infrastructure/db/repositories/prisma-device.repository";
@@ -18,13 +18,9 @@ import AuthHandler from "../infrastructure/grpc/handlers/auth.handler";
 import MessageService from "../infrastructure/message/service";
 import JobService from "../infrastructure/job/service";
 import DbService from "../infrastructure/db/service";
-import {
-    config as messageConfig,
-    messageConsumersConfig,
-    messageProducersConfig
-} from "../infrastructure/message/config";
-import {config as jobConfig} from "../infrastructure/job/config";
-import {config as authConfig} from "../infrastructure/auth/config";
+import {messageConfig, messageConsumersConfig, messageProducersConfig} from "../infrastructure/message/config";
+import jobConfig from "../infrastructure/job/config";
+import authConfig from "../infrastructure/auth/config";
 
 
 function buildApplication() {
