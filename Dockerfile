@@ -113,4 +113,4 @@ LABEL org.opencontainers.image.version="$VERSION"
 
 WORKDIR /usr/src/app/services/auth
 
-CMD ["pnpm", "--filter", "auth", "migrate"]
+CMD ["pnpm", "--filter", "auth", "migrate:deploy"]
