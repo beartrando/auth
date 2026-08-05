@@ -21,6 +21,7 @@ import JobService from "../infrastructure/job/service";
 import DbService from "../infrastructure/db/service";
 import {config as messageConfig, messageConsumersConfig, messageProducersConfig} from "../infrastructure/message/config";
 import {config as jobConfig} from "../infrastructure/job/config";
+import {config as authConfig} from "../infrastructure/auth/config";
 
 
 function buildApplication() {
@@ -29,7 +30,7 @@ function buildApplication() {
     const jobService = new JobService(jobConfig, messageConfig, messageProducersConfig)
     const dbService = new DbService();
 
-    const authService = new AuthService();
+    const authService = new AuthService(authConfig);
 
     const deviceRepository = new PrismaDeviceRepository(dbService.client);
     const userRepository = new PrismaUserRepository(dbService.client);

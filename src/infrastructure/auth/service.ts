@@ -1,5 +1,4 @@
 import jwt, {JwtPayload, SignOptions} from "jsonwebtoken";
-import config from "./config";
 
 import AccessToken from "../../domain/value-objects/access-token.vo";
 import RefreshToken from "../../domain/value-objects/refresh-token.vo";
@@ -22,15 +21,12 @@ export interface AuthConfig {
 export class AuthService implements TokenService {
     constructor(private readonly config: AuthConfig) {}
 
-    generateAccessToken(
-        userId: Id,
-    ): AccessToken {
-
+    generateAccessToken(userId: Id): AccessToken {
         const token = jwt.sign(
             {},
-            this.accessSecret,
+            this.config.accessSecret,
             {
-                ...accessTokenOptions,
+                expiresIn: this.config.accessTokenExpiresIn,
                 subject: userId.value,
             },
         );
@@ -38,15 +34,12 @@ export class AuthService implements TokenService {
         return new AccessToken(token);
     }
 
-    generateRefreshToken(
-        userId: Id,
-    ): RefreshToken {
-
+    generateRefreshToken(userId: Id): RefreshToken {
         const token = jwt.sign(
             {},
-            this.refreshSecret,
+            this.config.refreshSecret,
             {
-                ...refreshTokenOptions,
+                expiresIn: this.config.refreshTokenExpiresIn,
                 subject: userId.value,
             },
         );
@@ -54,20 +47,14 @@ export class AuthService implements TokenService {
         return new RefreshToken(token);
     }
 
-
-    verifyAccessToken(
-        token: AccessToken,
-    ): Id {
-        const payload = this.payload(token.value, this.accessSecret);
+    verifyAccessToken(token: AccessToken): Id {
+        const payload = this.payload(token.value, this.config.accessSecret);
 
         return new Id(payload.sub);
     }
 
-
-    verifyRefreshToken(
-        token: RefreshToken,
-    ): Id {
-        const payload = this.payload(token.value, this.refreshSecret);
+    verifyRefreshToken(token: RefreshToken): Id {
+        const payload = this.payload(token.value, this.config.refreshSecret);
 
         return new Id(payload.sub);
     }
