@@ -12,18 +12,15 @@ interface TokenPayload extends JwtPayload {
     sub: string;
 }
 
-const accessTokenOptions: SignOptions = {
-    expiresIn: config.accessTokenExpiresIn as any,
-};
-
-const refreshTokenOptions: SignOptions = {
-    expiresIn: config.refreshTokenExpiresIn as any,
-};
+export interface AuthConfig {
+    accessSecret: jwt.Secret;
+    accessTokenExpiresIn: SignOptions["expiresIn"];
+    refreshSecret: jwt.Secret;
+    refreshTokenExpiresIn: SignOptions["expiresIn"];
+}
 
 export class AuthService implements TokenService {
-
-    private readonly accessSecret: jwt.Secret = config.jwtAccessSecret;
-    private readonly refreshSecret: jwt.Secret = config.jwtRefreshSecret;
+    constructor(private readonly config: AuthConfig) {}
 
     generateAccessToken(
         userId: Id,
