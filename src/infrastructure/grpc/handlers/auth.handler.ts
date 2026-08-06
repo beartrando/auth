@@ -8,9 +8,9 @@ import AnonymousSignInUseCase from "../../../application/use-cases/auth/anonymou
 import RefreshTokensUseCase from "../../../application/use-cases/auth/refresh-tokens";
 import LogoutUseCase from "../../../application/use-cases/auth/logout";
 import GetUserUseCase from "../../../application/use-cases/auth/getUser";
-import DeviceId from "../../../domain/value-objects/device-id.vo";
+import DeviceId from "../../../domain/value-objects/device/device-id.vo";
 import AuthProtoMapper from "../mappers/auth.proto.mapper";
-import RefreshToken from "../../../domain/value-objects/refresh-token.vo";
+import RefreshToken from "../../../domain/value-objects/session/refresh-token.vo";
 import AuthHelper from "../helpers/auth.helper";
 import Id from "../../../domain/value-objects/id.vo";
 import UserProtoMapper from "../mappers/user.proto.mapper";

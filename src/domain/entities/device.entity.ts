@@ -1,5 +1,5 @@
 import Id from "../value-objects/id.vo";
-import DeviceId from "../value-objects/device-id.vo";
+import DeviceId from "../value-objects/device/device-id.vo";
 
 type DeviceEntityProps = {
     id?: Id;

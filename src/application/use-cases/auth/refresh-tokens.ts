@@ -1,7 +1,7 @@
 import AuthService from "../../../infrastructure/auth/service";
 import PrismaSessionRepository from "../../../infrastructure/db/repositories/prisma-session.repository";
 
-import RefreshToken from "../../../domain/value-objects/refresh-token.vo";
+import RefreshToken from "../../../domain/value-objects/session/refresh-token.vo";
 import Auth from "../../../domain/value-objects/auth.vo";
 import Id from "../../../domain/value-objects/id.vo";
 

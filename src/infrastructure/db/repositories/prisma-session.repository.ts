@@ -4,7 +4,7 @@ import SessionRepository from "../../../domain/repositories/session.repository";
 import SessionEntity from "../../../domain/entities/session.entity";
 
 import Id from "../../../domain/value-objects/id.vo";
-import RefreshToken from "../../../domain/value-objects/refresh-token.vo";
+import RefreshToken from "../../../domain/value-objects/session/refresh-token.vo";
 import SessionDbMapper from "../mappers/session.mapper";
 
 export class PrismaSessionRepository implements SessionRepository {

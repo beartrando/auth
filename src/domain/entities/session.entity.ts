@@ -1,6 +1,6 @@
 import Id from "../value-objects/id.vo";
-import AccessToken from "../value-objects/access-token.vo";
-import RefreshToken from "../value-objects/refresh-token.vo";
+import AccessToken from "../value-objects/session/access-token.vo";
+import RefreshToken from "../value-objects/session/refresh-token.vo";
 
 type SessionEntityProps = {
     id?: Id;

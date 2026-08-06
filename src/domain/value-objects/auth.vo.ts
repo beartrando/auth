@@ -1,5 +1,5 @@
-import AccessToken from "./access-token.vo";
-import RefreshToken from "./refresh-token.vo";
+import AccessToken from "./session/access-token.vo";
+import RefreshToken from "./session/refresh-token.vo";
 
 export class Auth {
     constructor(

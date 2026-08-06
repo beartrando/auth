@@ -1,7 +1,7 @@
 import {User} from "@prisma/client";
 import UserEntity from "../../../domain/entities/user.entity";
 import Id from "../../../domain/value-objects/id.vo";
-import Email from "../../../domain/value-objects/email.vo";
+import Email from "../../../domain/value-objects/user/email.vo";
 
 type UserSaveData = Omit<
     User,

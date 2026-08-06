@@ -1,7 +1,7 @@
 // import DeviceId from "../value-objects/id";
 // import Auth from "../value-objects/auth.vo";
-// import AccessToken from "../value-objects/access-token.vo";
-// import RefreshToken from "../value-objects/refresh-token.vo";
+// import AccessToken from "../value-objects/session/access-token.vo";
+// import RefreshToken from "../value-objects/session/refresh-token.vo";
 //
 // export class AuthDomainService {
 //

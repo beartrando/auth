@@ -1,7 +1,7 @@
 import {Device} from "@prisma/client";
 import Id from "../../../domain/value-objects/id.vo";
 import DeviceEntity from "../../../domain/entities/device.entity";
-import DeviceId from "../../../domain/value-objects/device-id.vo";
+import DeviceId from "../../../domain/value-objects/device/device-id.vo";
 
 type DeviceSaveData = Omit<
     Device,

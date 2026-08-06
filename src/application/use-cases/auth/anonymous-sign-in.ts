@@ -1,6 +1,6 @@
 import DeviceRepository from "../../../domain/repositories/device.repository";
 import UserRepository from "../../../domain/repositories/user.repository";
-import DeviceId from "../../../domain/value-objects/device-id.vo";
+import DeviceId from "../../../domain/value-objects/device/device-id.vo";
 import Auth from "../../../domain/value-objects/auth.vo";
 import UserEntity from "../../../domain/entities/user.entity";
 import DeviceEntity from "../../../domain/entities/device.entity";

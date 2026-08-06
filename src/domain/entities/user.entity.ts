@@ -1,5 +1,5 @@
 import Id from "../value-objects/id.vo";
-import Email from "../value-objects/email.vo";
+import Email from "../value-objects/user/email.vo";
 
 type UserEntityProps = {
     id?: Id;
