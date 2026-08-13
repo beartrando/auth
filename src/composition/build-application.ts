@@ -21,13 +21,12 @@ import DbService from "../infrastructure/db/service";
 import jobConfig from "../infrastructure/job/config";
 import authConfig from "../infrastructure/auth/config";
 import messageConfig from "../infrastructure/message/configs/message.config";
-import messageConsumersConfig from "../infrastructure/message/configs/consumers.config";
 import messageProducersConfig from "../infrastructure/message/configs/producers.config";
 
 
 function buildApplication() {
 
-    const messageService = new MessageService(messageConfig, messageConsumersConfig);
+    const messageService = new MessageService(messageConfig);
     const jobService = new JobService(jobConfig, messageConfig, messageProducersConfig)
     const dbService = new DbService();
 
