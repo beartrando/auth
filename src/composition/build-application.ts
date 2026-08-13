@@ -18,9 +18,11 @@ import AuthHandler from "../infrastructure/grpc/handlers/auth.handler";
 import MessageService from "../infrastructure/message/service";
 import JobService from "../infrastructure/job/service";
 import DbService from "../infrastructure/db/service";
-import {messageConfig, messageConsumersConfig, messageProducersConfig} from "../infrastructure/message/config";
 import jobConfig from "../infrastructure/job/config";
 import authConfig from "../infrastructure/auth/config";
+import messageConfig from "../infrastructure/message/configs/message.config";
+import messageConsumersConfig from "../infrastructure/message/configs/consumers.config";
+import messageProducersConfig from "../infrastructure/message/configs/producers.config";
 
 
 function buildApplication() {
