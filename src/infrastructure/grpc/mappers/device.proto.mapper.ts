@@ -1,8 +1,8 @@
 // import {Device} from "@prisma/client";
-// import DeviceId from "../../../domain/value-objects/id.vo";
+// import ProfileId from "../../../domain/value-objects/id.vo";
 // import * as authProto from "../../../contracts/proto/auth";
 // export class DeviceDbMapper {
-//     static to(device: DeviceEntity): Device {
+//     static to(device: ProfileEntity): Device {
 //         return {
 //             device.id.value,
 //             device.userId.value,
@@ -12,10 +12,10 @@
 //         };
 //     }
 //
-//     static from(device: Device): DeviceEntity {
-//         return new DeviceEntity(
-//             new DeviceId(device.id),
-//             new DeviceId(device.userId),
+//     static from(device: Device): ProfileEntity {
+//         return new ProfileEntity(
+//             new ProfileId(device.id),
+//             new ProfileId(device.userId),
 //             device.deviceId,
 //             device.createdAt,
 //             device.updatedAt,

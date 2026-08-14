@@ -3,7 +3,7 @@ export class DeviceId {
         readonly value: string,
     ) {
         if (!value) {
-            throw new Error("DeviceId cannot be empty");
+            throw new Error("ProfileId cannot be empty");
         }
     }
 

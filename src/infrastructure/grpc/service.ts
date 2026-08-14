@@ -49,19 +49,19 @@ export class GrpcService {
 
     private registerAuthService() {
         this.server.addService(authProto.AuthService, {
-            anonymousSignIn: this.authHandler.anonymousSignIn,
-            get: this.authHandler.get,
-            logout: this.authHandler.logout,
-            refreshTokens: this.authHandler.refreshTokens,
+            anonymousSignIn: this.authHandler.anonymousSignIn.bind(this.authHandler),
+            get: this.authHandler.get.bind(this.authHandler),
+            logout: this.authHandler.logout.bind(this.authHandler),
+            refreshTokens: this.authHandler.refreshTokens.bind(this.authHandler),
         });
     }
 
     private registerHealthService() {
         this.server.addService(healthProto.HealthService, {
-            check: this.healthHandler.check,
-            status: this.healthHandler.status,
-            livez: this.healthHandler.livez,
-            readyz: this.healthHandler.readyz,
+            check: this.healthHandler.check.bind(this.healthHandler),
+            status: this.healthHandler.status.bind(this.healthHandler),
+            livez: this.healthHandler.livez.bind(this.healthHandler),
+            readyz: this.healthHandler.readyz.bind(this.healthHandler),
         });
     }
 

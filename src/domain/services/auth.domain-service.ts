@@ -1,4 +1,4 @@
-// import DeviceId from "../value-objects/id";
+// import ProfileId from "../value-objects/id";
 // import Auth from "../value-objects/auth.vo";
 // import AccessToken from "../value-objects/session/access-token.vo";
 // import RefreshToken from "../value-objects/session/refresh-token.vo";
@@ -6,7 +6,7 @@
 // export class AuthDomainService {
 //
 //     createAuth(
-//         userId: DeviceId,
+//         userId: ProfileId,
 //     ): Auth {
 //
 //         const accessToken = this.generateAccessToken(userId);
@@ -20,7 +20,7 @@
 //
 //
 //     private generateAccessToken(
-//         userId: DeviceId,
+//         userId: ProfileId,
 //     ): string {
 //         // TODO: JWT generation
 //         return "";
@@ -28,7 +28,7 @@
 //
 //
 //     private generateRefreshToken(
-//         userId: DeviceId,
+//         userId: ProfileId,
 //     ): string {
 //         // TODO: JWT generation
 //         return "";

@@ -4,9 +4,9 @@ import DeviceId from "../value-objects/device/device-id.vo";
 export interface DeviceRepository {
     findByDeviceId(deviceId: DeviceId): Promise<DeviceEntity | null>;
 
-    // findByUserId(userId: DeviceId): Promise<DeviceEntity[]>;
+    // findByUserId(userId: ProfileId): Promise<ProfileEntity[]>;
 
-    // create(device: DeviceEntity): Promise<void>;
+    // create(device: ProfileEntity): Promise<void>;
 
     save(device: DeviceEntity): Promise<void>;
 }
