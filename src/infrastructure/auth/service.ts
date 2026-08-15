@@ -5,18 +5,9 @@ import RefreshToken from "../../domain/value-objects/session/refresh-token.vo";
 
 import TokenService from "../../application/ports/token-service.port";
 import Id from "../../domain/value-objects/id.vo";
+import AuthConfig from "./interfaces/auth-config";
+import TokenPayload from "./interfaces/token-payload";
 
-
-interface TokenPayload extends JwtPayload {
-    sub: string;
-}
-
-export interface AuthConfig {
-    accessSecret: jwt.Secret;
-    accessTokenExpiresIn: SignOptions["expiresIn"];
-    refreshSecret: jwt.Secret;
-    refreshTokenExpiresIn: SignOptions["expiresIn"];
-}
 
 export class AuthService implements TokenService {
     constructor(private readonly config: AuthConfig) {

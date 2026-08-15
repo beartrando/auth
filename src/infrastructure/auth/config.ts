@@ -1,6 +1,6 @@
-import {AuthConfig} from "./service";
 import {SignOptions} from "jsonwebtoken";
 import logger from "@shared/logger";
+import AuthConfig from "./interfaces/auth-config";
 
 function required(name: string): string {
     logger.log(process.env);
