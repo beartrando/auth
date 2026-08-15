@@ -5,9 +5,3 @@ const application = buildApplication();
 
 
 application.start();
-
-
-
-
-
-
