@@ -9,6 +9,7 @@ import DbService from "../../../infrastructure/db/service";
 import SessionRepository from "../../../domain/repositories/session.repository";
 import JobService from "../../../infrastructure/job/service";
 import AuthService from "../../../infrastructure/auth/service";
+import UserProtoMapper from "../../../infrastructure/grpc/mappers/user.proto.mapper";
 
 export class AnonymousSignInUseCase {
 
@@ -54,7 +55,9 @@ export class AnonymousSignInUseCase {
 
             await this.sessionRepository.save(session);
 
-            await this.jobService.enqueueTx(this.userCreatedTopic, user, tx);
+            const userObject = UserProtoMapper.toProto(user);
+
+            await this.jobService.enqueueTx(this.userCreatedTopic, userObject, tx);
 
             return session;
         })
