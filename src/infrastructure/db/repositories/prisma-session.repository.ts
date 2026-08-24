@@ -1,11 +1,11 @@
 import {PrismaClient} from "@prisma/client";
 
-import SessionRepository from "../../../domain/repositories/session.repository";
-import SessionEntity from "../../../domain/entities/session.entity";
+import SessionRepository from "../../../domain/session/session.repository";
+import SessionEntity from "../../../domain/session/session.entity";
 
-import Id from "../../../domain/value-objects/id.vo";
-import RefreshToken from "../../../domain/value-objects/session/refresh-token.vo";
+import SessionRefreshToken from "../../../domain/session/value-objects/sesion-refresh-token.vo";
 import SessionDbMapper from "../mappers/session.mapper";
+import UserId from "../../../domain/user/value-objects/user-id.vo";
 
 export class PrismaSessionRepository implements SessionRepository {
 
@@ -15,7 +15,7 @@ export class PrismaSessionRepository implements SessionRepository {
     }
 
     async findByRefreshToken(
-        refreshToken: RefreshToken,
+        refreshToken: SessionRefreshToken,
     ): Promise<SessionEntity | null> {
 
         const session = await this.prisma.session.findFirst({
@@ -52,7 +52,7 @@ export class PrismaSessionRepository implements SessionRepository {
     }
 
     async deleteByUserId(
-        userId: Id,
+        userId: UserId,
     ): Promise<void> {
 
         await this.prisma.session.deleteMany({

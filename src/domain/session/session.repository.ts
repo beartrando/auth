@@ -1,10 +1,10 @@
 import SessionEntity from "../entities/session.entity";
-import Id from "../value-objects/id.vo";
+import UserId from "../user/value-objects/user-id.vo";
 
 export interface SessionRepository {
     save(session: SessionEntity): Promise<void>;
 
-    deleteByUserId(userId: Id): Promise<void>;
+    deleteByUserId(userId: UserId): Promise<void>;
 }
 
 export default SessionRepository;

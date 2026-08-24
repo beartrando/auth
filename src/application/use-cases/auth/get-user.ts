@@ -1,6 +1,6 @@
-import UserRepository from "../../../domain/repositories/user.repository";
-import UserEntity from "../../../domain/entities/user.entity";
-import Id from "../../../domain/value-objects/id.vo";
+import UserRepository from "../../../domain/user/user.repository";
+import UserEntity from "../../../domain/user/user.entity";
+import UserId from "../../../domain/user/value-objects/user-id.vo";
 
 export class GetUserUseCase {
     constructor(
@@ -8,7 +8,7 @@ export class GetUserUseCase {
     ) {
     }
 
-    async execute(userId: Id): Promise<UserEntity> {
+    async execute(userId: UserId): Promise<UserEntity> {
         const user = await this.userRepository.findById(userId);
 
         if (!user) {

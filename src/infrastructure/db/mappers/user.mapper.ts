@@ -1,7 +1,7 @@
 import {User} from "@prisma/client";
-import UserEntity from "../../../domain/entities/user.entity";
-import Id from "../../../domain/value-objects/id.vo";
-import Email from "../../../domain/value-objects/user/email.vo";
+import UserEntity from "../../../domain/user/user.entity";
+import UserEmail from "../../../domain/user/value-objects/user-email.vo";
+import UserId from "../../../domain/user/value-objects/user-id.vo";
 
 type UserSaveData = Omit<
     User,
@@ -25,8 +25,8 @@ export class UserDbMapper {
 
     static toDomain(user: User): UserEntity {
         return new UserEntity(
-            new Id(user.id),
-            user.email ? new Email(user.email) : null,
+            new UserId(user.id),
+            user.email ? new UserEmail(user.email) : null,
             user.googleId,
             user.lastLoginAt,
             user.lastActiveAt,

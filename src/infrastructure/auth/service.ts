@@ -1,19 +1,19 @@
-import jwt, {JwtPayload, SignOptions} from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 
-import AccessToken from "../../domain/value-objects/session/access-token.vo";
-import RefreshToken from "../../domain/value-objects/session/refresh-token.vo";
+import SessionAccessToken from "../../domain/session/value-objects/session-access-token.vo";
+import SessionRefreshToken from "../../domain/session/value-objects/sesion-refresh-token.vo";
 
 import TokenService from "../../application/ports/token-service.port";
-import Id from "../../domain/value-objects/id.vo";
 import AuthConfig from "./interfaces/auth-config";
 import TokenPayload from "./interfaces/token-payload";
+import UserId from "../../domain/user/value-objects/user-id.vo";
 
 
 export class AuthService implements TokenService {
     constructor(private readonly config: AuthConfig) {
     }
 
-    generateAccessToken(userId: Id): AccessToken {
+    generateAccessToken(userId: UserId): SessionAccessToken {
         const token = jwt.sign(
             {},
             this.config.accessSecret,
@@ -23,10 +23,10 @@ export class AuthService implements TokenService {
             },
         );
 
-        return new AccessToken(token);
+        return new SessionAccessToken(token);
     }
 
-    generateRefreshToken(userId: Id): RefreshToken {
+    generateRefreshToken(userId: UserId): SessionRefreshToken {
         const token = jwt.sign(
             {},
             this.config.refreshSecret,
@@ -36,19 +36,19 @@ export class AuthService implements TokenService {
             },
         );
 
-        return new RefreshToken(token);
+        return new SessionRefreshToken(token);
     }
 
-    verifyAccessToken(token: AccessToken): Id {
+    verifyAccessToken(token: SessionAccessToken): UserId {
         const payload = this.payload(token.value, this.config.accessSecret);
 
-        return new Id(payload.sub);
+        return new UserId(payload.sub);
     }
 
-    verifyRefreshToken(token: RefreshToken): Id {
+    verifyRefreshToken(token: SessionRefreshToken): UserId {
         const payload = this.payload(token.value, this.config.refreshSecret);
 
-        return new Id(payload.sub);
+        return new UserId(payload.sub);
     }
 
     private payload(

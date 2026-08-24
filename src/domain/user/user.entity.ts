@@ -1,9 +1,9 @@
-import Id from "../value-objects/id.vo";
-import Email from "../value-objects/user/email.vo";
+import UserId from "./value-objects/user-id.vo";
+import UserEmail from "./value-objects/user-email.vo";
 
 type UserEntityProps = {
-    id?: Id;
-    email?: Email | null;
+    id?: UserId;
+    email?: UserEmail | null;
     googleId?: string | null;
     lastLoginAt?: Date | null;
     lastActiveAt?: Date | null;
@@ -13,8 +13,8 @@ type UserEntityProps = {
 
 export class UserEntity {
     constructor(
-        readonly id: Id,
-        readonly email: Email | null,
+        readonly id: UserId,
+        readonly email: UserEmail | null,
         // readonly passwordHash: string | null,
         readonly googleId: string | null,
         readonly lastLoginAt: Date | null,
@@ -30,7 +30,7 @@ export class UserEntity {
         const now = new Date();
 
         return new UserEntity(
-            props.id ?? Id.create(),
+            props.id ?? UserId.create(),
             props.email ?? null,
             props.googleId ?? null,
             (props.lastLoginAt === undefined ? now : props.lastLoginAt),

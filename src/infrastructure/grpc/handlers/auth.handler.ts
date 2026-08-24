@@ -7,14 +7,14 @@ import logger from "@shared/logger";
 import AnonymousSignInUseCase from "../../../application/use-cases/auth/anonymous-sign-in";
 import RefreshTokensUseCase from "../../../application/use-cases/auth/refresh-tokens";
 import LogoutUseCase from "../../../application/use-cases/auth/logout";
-import GetUserUseCase from "../../../application/use-cases/auth/getUser";
-import DeviceId from "../../../domain/value-objects/device/device-id.vo";
+import GetUserUseCase from "../../../application/use-cases/auth/get-user";
 import AuthProtoMapper from "../mappers/auth.proto.mapper";
-import RefreshToken from "../../../domain/value-objects/session/refresh-token.vo";
+import SessionRefreshToken from "../../../domain/session/value-objects/sesion-refresh-token.vo";
 import AuthHelper from "../helpers/auth.helper";
-import Id from "../../../domain/value-objects/id.vo";
 import UserProtoMapper from "../mappers/user.proto.mapper";
 import AuthService from "../../auth/service";
+import DeviceDeviceId from "../../../domain/device/value-objects/device-device-id.vo";
+import UserId from "../../../domain/user/value-objects/user-id.vo";
 
 export class AuthHandler {
     constructor(
@@ -33,7 +33,7 @@ export class AuthHandler {
         try {
             const {deviceId} = call.request;
             // logger.log('anonymousSignIn ' + deviceId);
-            const session = await this.anonymousSignInUseCase.execute(new DeviceId(deviceId));
+            const session = await this.anonymousSignInUseCase.execute(new DeviceDeviceId(deviceId));
 
             const result = authProto.AuthResponse.create({auth: AuthProtoMapper.toProto(session)});
 
@@ -52,7 +52,7 @@ export class AuthHandler {
         const {token} = call.request;
 
         try {
-            const refreshToken = new RefreshToken(token);
+            const refreshToken = new SessionRefreshToken(token);
 
             const userId = this.authService.verifyRefreshToken(refreshToken);
 
@@ -96,7 +96,7 @@ export class AuthHandler {
             const {userId} = call.request;
             const accessToken = AuthHelper.getAccessToken(call);
             // logger.log('anonymousSignIn ' + deviceId);
-            const userObject = UserProtoMapper.toProto(await this.getUseCase.execute(new Id(userId)));
+            const userObject = UserProtoMapper.toProto(await this.getUseCase.execute(new UserId(userId)));
 
             const result = authProto.UserResponse.create({user: userObject})
 

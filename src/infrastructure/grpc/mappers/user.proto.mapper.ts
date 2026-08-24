@@ -1,7 +1,7 @@
 import * as authProto from "../../../contracts/proto/auth";
-import UserEntity from "../../../domain/entities/user.entity";
-import Email from "../../../domain/value-objects/user/email.vo";
-import Id from "../../../domain/value-objects/id.vo";
+import UserEntity from "../../../domain/user/user.entity";
+import UserEmail from "../../../domain/user/value-objects/user-email.vo";
+import UserId from "../../../domain/user/value-objects/user-id.vo";
 
 export class UserProtoMapper {
     static toProto(user: UserEntity): authProto.UserObject {
@@ -20,8 +20,8 @@ export class UserProtoMapper {
     static toDomain(user: authProto.UserObject): UserEntity {
 
         return UserEntity.create({
-            id: new Id(user.id),
-            email: user.email ? new Email(user.email) : null,
+            id: new UserId(user.id),
+            email: user.email ? new UserEmail(user.email) : null,
             googleId: user.googleId,
             lastLoginAt: user.lastLoginAt,
             lastActiveAt: user.lastActiveAt,

@@ -1,9 +1,9 @@
 // import {Session} from "@prisma/client";
-// import ProfileEntity from "../../../domain/entities/user.entity";
+// import ProfileEntity from "../../../domain/user/user.entity";
 // import ProfileId from "../../../domain/value-objects/id.vo";
-// import SessionEntity from "../../../domain/entities/session.entity";
-// import AccessToken from "../../../domain/value-objects/session/access-token.vo";
-// import RefreshToken from "../../../domain/value-objects/session/refresh-token.vo";
+// import SessionEntity from "../../../domain/session/session.entity";
+// import SessionAccessToken from "../../../domain/session/value-objects/access-token.vo";
+// import SessionRefreshToken from "../../../domain/session/value-objects/refresh-token.vo";
 // import * as authProto from "../../../contracts/proto/auth";
 // export class SessionDbMapper {
 //     static to(session: SessionEntity): Session {
@@ -23,8 +23,8 @@
 //
 //             new ProfileId(session.userId),
 //
-//             new AccessToken(session.accessToken),
-//             new RefreshToken(session.refreshToken),
+//             new SessionAccessToken(session.accessToken),
+//             new SessionRefreshToken(session.refreshToken),
 //
 //             session.createdAt,
 //             session.updatedAt,

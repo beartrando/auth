@@ -1,13 +1,13 @@
 import {Session} from "@prisma/client";
-import Auth from "../../../domain/value-objects/auth.vo";
-import AccessToken from "../../../domain/value-objects/session/access-token.vo";
-import RefreshToken from "../../../domain/value-objects/session/refresh-token.vo";
+import AuthObject from "../../../domain/auth/value-objects/auth-object.vo";
+import SessionAccessToken from "../../../domain/session/value-objects/session-access-token.vo";
+import SessionRefreshToken from "../../../domain/session/value-objects/sesion-refresh-token.vo";
 
 export class AuthDbMapper {
-    static toDomain(session: Session): Auth {
-        return new Auth(
-            new AccessToken(session.accessToken),
-            new RefreshToken(session.refreshToken),
+    static toDomain(session: Session): AuthObject {
+        return new AuthObject(
+            new SessionAccessToken(session.accessToken),
+            new SessionRefreshToken(session.refreshToken),
         );
     }
 

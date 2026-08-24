@@ -1,4 +1,4 @@
-export class Email {
+export class UserEmail {
     private readonly normalized: string;
 
     constructor(
@@ -6,7 +6,7 @@ export class Email {
     ) {
         const normalized = value.trim().toLowerCase();
 
-        if (!Email.isValid(normalized)) {
+        if (!UserEmail.isValid(normalized)) {
             throw new Error("Invalid email");
         }
 
@@ -21,7 +21,7 @@ export class Email {
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
     }
 
-    equals(other: Email): boolean {
+    equals(other: UserEmail): boolean {
         return this.value === other.value;
     }
 
@@ -30,4 +30,4 @@ export class Email {
     }
 }
 
-export default Email;
+export default UserEmail;

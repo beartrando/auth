@@ -1,5 +1,5 @@
 import PrismaSessionRepository from "../../../infrastructure/db/repositories/prisma-session.repository";
-import Id from "../../../domain/value-objects/id.vo";
+import UserId from "../../../domain/user/value-objects/user-id.vo";
 
 export class LogoutUseCase {
     constructor(
@@ -8,7 +8,7 @@ export class LogoutUseCase {
     }
 
     async execute(
-        userId: Id,
+        userId: UserId,
     ): Promise<void> {
         await this.sessionRepository.deleteByUserId(userId);
     }

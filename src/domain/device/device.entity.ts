@@ -1,19 +1,20 @@
-import Id from "../value-objects/id.vo";
-import DeviceId from "../value-objects/device/device-id.vo";
+import UserId from "../user/value-objects/user-id.vo";
+import DeviceDeviceId from "./value-objects/device-device-id.vo";
+import DeviceId from "./value-objects/device-id.vo";
 
 type DeviceEntityProps = {
-    id?: Id;
-    userId: Id;
-    deviceId: DeviceId;
+    id?: DeviceId;
+    userId: UserId;
+    deviceId: DeviceDeviceId;
     createdAt?: Date;
     updatedAt?: Date;
 };
 
 export class DeviceEntity {
     constructor(
-        readonly id: Id,
-        readonly userId: Id,
-        readonly deviceId: DeviceId,
+        readonly id: DeviceId,
+        readonly userId: UserId,
+        readonly deviceId: DeviceDeviceId,
         readonly createdAt: Date,
         readonly updatedAt: Date,
     ) {
@@ -25,7 +26,7 @@ export class DeviceEntity {
         const now = new Date();
 
         return new DeviceEntity(
-            props.id ?? Id.create(),
+            props.id ?? DeviceId.create(),
             props.userId,
             props.deviceId,
             props.createdAt ?? now,

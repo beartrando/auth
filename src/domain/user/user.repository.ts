@@ -1,8 +1,8 @@
 import UserEntity from "../entities/user.entity";
-import Id from "../value-objects/id.vo";
+import UserId from "./value-objects/user-id.vo";
 
 export interface UserRepository {
-    findById(id: Id): Promise<UserEntity | null>;
+    findById(id: UserId): Promise<UserEntity | null>;
 
     save(user: UserEntity): Promise<UserEntity>;
 }

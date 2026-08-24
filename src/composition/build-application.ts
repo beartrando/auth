@@ -13,7 +13,7 @@ import AuthService from "../infrastructure/auth/service";
 import PrismaDeviceRepository from "../infrastructure/db/repositories/prisma-device.repository";
 import PrismaUserRepository from "../infrastructure/db/repositories/prisma-user.repository";
 import PrismaSessionRepository from "../infrastructure/db/repositories/prisma-session.repository";
-import GetUserUseCase from "../application/use-cases/auth/getUser";
+import GetUserUseCase from "../application/use-cases/auth/get-user";
 import AuthHandler from "../infrastructure/grpc/handlers/auth.handler";
 import MessageService from "../infrastructure/message/service";
 import JobService from "../infrastructure/job/service";

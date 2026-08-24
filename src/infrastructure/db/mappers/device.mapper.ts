@@ -1,7 +1,8 @@
 import {Device} from "@prisma/client";
-import Id from "../../../domain/value-objects/id.vo";
-import DeviceEntity from "../../../domain/entities/device.entity";
-import DeviceId from "../../../domain/value-objects/device/device-id.vo";
+import DeviceEntity from "../../../domain/device/device.entity";
+import DeviceId from "../../../domain/device/value-objects/device-id.vo";
+import UserId from "../../../domain/user/value-objects/user-id.vo";
+import DeviceDeviceId from "../../../domain/device/value-objects/device-device-id.vo";
 
 type DeviceSaveData = Omit<
     Device,
@@ -21,9 +22,9 @@ export class DeviceDbMapper {
 
     static toDomain(device: Device): DeviceEntity {
         return new DeviceEntity(
-            new Id(device.id),
-            new Id(device.userId),
-            new DeviceId(device.deviceId),
+            new DeviceId(device.id),
+            new UserId(device.userId),
+            new DeviceDeviceId(device.deviceId),
             device.createdAt,
             device.updatedAt,
         );

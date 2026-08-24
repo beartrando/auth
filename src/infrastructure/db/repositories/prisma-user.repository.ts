@@ -1,10 +1,10 @@
 import {PrismaClient} from "@prisma/client";
 
-import UserRepository from "../../../domain/repositories/user.repository";
-import UserEntity from "../../../domain/entities/user.entity";
+import UserRepository from "../../../domain/user/user.repository";
+import UserEntity from "../../../domain/user/user.entity";
 
-import Id from "../../../domain/value-objects/id.vo";
 import UserDbMapper from "../mappers/user.mapper";
+import UserId from "../../../domain/user/value-objects/user-id.vo";
 
 export class PrismaUserRepository implements UserRepository {
 
@@ -14,7 +14,7 @@ export class PrismaUserRepository implements UserRepository {
     }
 
     async findById(
-        id: Id,
+        id: UserId,
     ): Promise<UserEntity | null> {
 
         const user = await this.prisma.user.findUnique({

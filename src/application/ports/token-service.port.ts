@@ -1,23 +1,23 @@
-import Id from "../../domain/value-objects/id.vo";
-import AccessToken from "../../domain/value-objects/session/access-token.vo";
-import RefreshToken from "../../domain/value-objects/session/refresh-token.vo";
+import SessionAccessToken from "../../domain/session/value-objects/session-access-token.vo";
+import SessionRefreshToken from "../../domain/session/value-objects/sesion-refresh-token.vo";
+import UserId from "../../domain/user/value-objects/user-id.vo";
 
 export interface TokenService {
     generateAccessToken(
-        userId: Id,
-    ): AccessToken;
+        userId: UserId,
+    ): SessionAccessToken;
 
     generateRefreshToken(
-        userId: Id,
-    ): RefreshToken;
+        userId: UserId,
+    ): SessionRefreshToken;
 
     verifyAccessToken(
-        token: AccessToken,
-    ): Id;
+        token: SessionAccessToken,
+    ): UserId;
 
     verifyRefreshToken(
-        token: RefreshToken,
-    ): Id;
+        token: SessionRefreshToken,
+    ): UserId;
 }
 
 export default TokenService;

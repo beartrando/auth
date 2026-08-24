@@ -1,8 +1,8 @@
 import * as authProto from "../../../contracts/proto/auth";
-import Auth from "../../../domain/value-objects/auth.vo";
+import AuthObject from "../../../domain/auth/value-objects/auth-object.vo";
 
 export class AuthProtoMapper {
-    static toProto(auth: Auth): authProto.AuthObject {
+    static toProto(auth: AuthObject): authProto.AuthObject {
         return authProto.AuthObject.create({
             accessToken: auth.accessToken.value,
             refreshToken: auth.refreshToken.value,

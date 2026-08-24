@@ -1,12 +1,12 @@
-import DeviceRepository from "../../../domain/repositories/device.repository";
-import UserRepository from "../../../domain/repositories/user.repository";
-import DeviceId from "../../../domain/value-objects/device/device-id.vo";
-import Auth from "../../../domain/value-objects/auth.vo";
-import UserEntity from "../../../domain/entities/user.entity";
-import DeviceEntity from "../../../domain/entities/device.entity";
-import SessionEntity from "../../../domain/entities/session.entity";
+import DeviceRepository from "../../../domain/device/device.repository";
+import UserRepository from "../../../domain/user/user.repository";
+import DeviceId from "../../../domain/device/value-objects/device-id.vo";
+import AuthObject from "../../../domain/auth/value-objects/auth-object.vo";
+import UserEntity from "../../../domain/user/user.entity";
+import DeviceEntity from "../../../domain/device/device.entity";
+import SessionEntity from "../../../domain/session/session.entity";
 import DbService from "../../../infrastructure/db/service";
-import SessionRepository from "../../../domain/repositories/session.repository";
+import SessionRepository from "../../../domain/session/session.repository";
 import JobService from "../../../infrastructure/job/service";
 import AuthService from "../../../infrastructure/auth/service";
 import UserProtoMapper from "../../../infrastructure/grpc/mappers/user.proto.mapper";
@@ -24,7 +24,7 @@ export class AnonymousSignInUseCase {
     ) {
     }
 
-    async execute(deviceId: DeviceId): Promise<Auth> {
+    async execute(deviceId: DeviceId): Promise<AuthObject> {
         let user: UserEntity | null = null;
 
         let device = await this.deviceRepository.findByDeviceId(deviceId);
@@ -37,6 +37,9 @@ export class AnonymousSignInUseCase {
             if (!user) {
                 user = UserEntity.create()
                 await this.userRepository.save(user);
+
+                const userObject = UserProtoMapper.toProto(user);
+                await this.jobService.enqueue(this.userCreatedTopic, userObject);
             }
 
             if (!device) {
@@ -55,14 +58,11 @@ export class AnonymousSignInUseCase {
 
             await this.sessionRepository.save(session);
 
-            const userObject = UserProtoMapper.toProto(user);
-
-            await this.jobService.enqueueTx(this.userCreatedTopic, userObject, tx);
 
             return session;
         })
 
-        return new Auth(session.accessToken, session.refreshToken);
+        return new AuthObject(session.accessToken, session.refreshToken);
     }
 }
 
