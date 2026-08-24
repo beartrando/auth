@@ -1,4 +1,4 @@
-import SessionEntity from "../entities/session.entity";
+import SessionEntity from "./session.entity";
 import UserId from "../user/value-objects/user-id.vo";
 
 export interface SessionRepository {
