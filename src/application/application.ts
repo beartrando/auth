@@ -31,12 +31,12 @@ export class Application {
             await this.dbService.start();
             await this.grpcService.start();
             logger.info(
-                '🚀 AuthObject service started',
+                '🚀 Auth service started',
             );
         } catch (err) {
             logger.error(
                 {err},
-                '💥 Failed to start AuthObject',
+                '💥 Failed to start Auth service',
             );
             process.exit(1);
         }

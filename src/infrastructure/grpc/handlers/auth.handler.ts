@@ -37,6 +37,7 @@ export class AuthHandler {
 
             const result = authProto.AuthResponse.create({auth: AuthProtoMapper.toProto(session)});
 
+            // logger.log(result);
             callback(null, result);
 
         } catch (err: any) {
@@ -59,6 +60,9 @@ export class AuthHandler {
             const authObject = await this.refreshTokensUseCase.execute(userId, refreshToken);
 
             const response = authProto.AuthResponse.create({auth: AuthProtoMapper.toProto(authObject)})
+
+            // logger.log(response);
+
 
             callback(null, response);
 
