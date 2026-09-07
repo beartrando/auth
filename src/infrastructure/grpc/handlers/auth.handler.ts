@@ -73,8 +73,8 @@ export class AuthHandler {
     };
 
     async logout(
-        call: grpc.ServerUnaryCall<emptyProto.Empty, responseProto.EmptyResponse>,
-        callback: grpc.sendUnaryData<responseProto.EmptyResponse>
+        call: grpc.ServerUnaryCall<emptyProto.Empty, responseProto.SuccessResponse>,
+        callback: grpc.sendUnaryData<responseProto.SuccessResponse>
     ) {
         try {
             const accessToken = AuthHelper.getAccessToken(call);
@@ -82,7 +82,7 @@ export class AuthHandler {
             const userId = this.authService.verifyAccessToken(accessToken)
 
             await this.logoutUseCase.execute(userId);
-            const response = responseProto.EmptyResponse.create({success: true});
+            const response = responseProto.SuccessResponse.create({success: true});
 
             callback(null, response);
 
