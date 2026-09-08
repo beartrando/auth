@@ -1,5 +1,5 @@
 // import {Device} from "@prisma/client";
-// import ProfileId from "../../../domain/value-objects/id.vo";
+// import ProfileId from "../../../setting/value-objects/id.vo";
 // import * as authProto from "../../../contracts/proto/auth";
 // export class DeviceDbMapper {
 //     static to(device: ProfileEntity): Device {
