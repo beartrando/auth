@@ -12,32 +12,38 @@ datasource db {
 model User {
   id           String    @id @default(uuid())
   email        String?   @unique
-  passwordHash String?
-  googleId     String?   @unique
-  lastLoginAt  DateTime?
-  lastActiveAt DateTime?
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+  passwordHash String?   @map("password_hash")
+  googleId     String?   @unique @map("google_id")
+  lastLoginAt  DateTime? @map("last_login_at")
+  lastActiveAt DateTime? @map("last_active_at")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
 
   sessions Session[]
   devices  Device[]
+
+  @@map("users")
 }
 
 model Session {
   id           String   @id @default(uuid())
-  userId       String
+  userId       String   @map("user_id")
   user         User     @relation(fields: [userId], references: [id])
-  accessToken  String
-  refreshToken String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  accessToken  String   @map("access_token")
+  refreshToken String   @map("refresh_token")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("sessions")
 }
 
 model Device {
   id        String   @id @default(uuid())
-  userId    String
+  userId    String   @map("user_id")
   user      User     @relation(fields: [userId], references: [id])
-  deviceId  String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  deviceId  String   @unique @map("device_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("devices")
 }
