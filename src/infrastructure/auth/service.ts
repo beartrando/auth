@@ -8,6 +8,7 @@ import AuthConfig from "./interfaces/auth-config";
 import TokenPayload from "./interfaces/token-payload";
 import UserId from "../../domain/user/value-objects/user-id.vo";
 import logger from "@shared/logger";
+import {TokenExpiredError} from "@shared/errors";
 
 
 export class AuthService implements TokenService {
@@ -23,6 +24,8 @@ export class AuthService implements TokenService {
                 subject: userId.value,
             },
         );
+
+        logger.log(this.config.accessTokenExpiresIn);
 
         return new SessionAccessToken(token);
     }
@@ -56,14 +59,21 @@ export class AuthService implements TokenService {
         token: SessionAccessToken,
         secret: jwt.Secret,
     ): TokenPayload {
-        // logger.log(token)
-        const payload = jwt.verify(token.value, secret) as TokenPayload;
+        try {
+            const payload = jwt.verify(token.value, secret) as TokenPayload;
 
-        if (!payload.sub) {
-            throw new Error("JWT payload missing sub");
+            if (!payload.sub) {
+                throw new Error("JWT payload missing sub");
+            }
+
+            return payload;
+        } catch (e) {
+            if (e instanceof jwt.TokenExpiredError) {
+                throw new TokenExpiredError();
+            }
+
+            throw e;
         }
-
-        return payload;
     }
 }
 
