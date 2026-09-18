@@ -1,7 +1,6 @@
 import DeviceRepository from "../../../domain/device/device.repository";
 import UserRepository from "../../../domain/user/user.repository";
 import DeviceId from "../../../domain/device/value-objects/device-id.vo";
-import AuthObject from "../../../domain/auth/value-objects/auth-object.vo";
 import UserEntity from "../../../domain/user/user.entity";
 import DeviceEntity from "../../../domain/device/device.entity";
 import SessionEntity from "../../../domain/session/session.entity";
@@ -24,7 +23,7 @@ export class AnonymousSignInUseCase {
     ) {
     }
 
-    async execute(deviceId: DeviceId): Promise<AuthObject> {
+    async execute(deviceId: DeviceId): Promise<SessionEntity> {
         let user: UserEntity | null = null;
 
         let device = await this.deviceRepository.findByDeviceId(deviceId);
@@ -62,7 +61,7 @@ export class AnonymousSignInUseCase {
             return session;
         })
 
-        return new AuthObject(session.accessToken, session.refreshToken);
+        return session;
     }
 }
 

@@ -25,7 +25,7 @@ export class AuthService implements TokenService {
             },
         );
 
-        logger.log(this.config.accessTokenExpiresIn);
+        // logger.log(this.config.accessTokenExpiresIn);
 
         return new SessionAccessToken(token);
     }

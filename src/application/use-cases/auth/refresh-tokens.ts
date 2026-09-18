@@ -2,8 +2,8 @@ import AuthService from "../../../infrastructure/auth/service";
 import PrismaSessionRepository from "../../../infrastructure/db/repositories/prisma-session.repository";
 
 import SessionRefreshToken from "../../../domain/session/value-objects/sesion-refresh-token.vo";
-import AuthObject from "../../../domain/auth/value-objects/auth-object.vo";
 import UserId from "../../../domain/user/value-objects/user-id.vo";
+import SessionEntity from "../../../domain/session/session.entity";
 
 export class RefreshTokensUseCase {
 
@@ -16,7 +16,7 @@ export class RefreshTokensUseCase {
     async execute(
         userId: UserId,
         refreshToken: SessionRefreshToken,
-    ): Promise<AuthObject> {
+    ): Promise<SessionEntity> {
 
         const session = await this.sessionRepository.findByRefreshToken(
             refreshToken,
@@ -44,10 +44,7 @@ export class RefreshTokensUseCase {
             session,
         );
 
-        return new AuthObject(
-            newAccessToken,
-            newRefreshToken,
-        );
+        return session;
     }
 }
 

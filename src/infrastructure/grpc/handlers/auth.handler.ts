@@ -8,7 +8,7 @@ import AnonymousSignInUseCase from "../../../application/use-cases/auth/anonymou
 import RefreshTokensUseCase from "../../../application/use-cases/auth/refresh-tokens";
 import LogoutUseCase from "../../../application/use-cases/auth/logout";
 import GetUserUseCase from "../../../application/use-cases/auth/get-user";
-import AuthProtoMapper from "../mappers/auth.proto.mapper";
+import SessionProtoMapper from "../mappers/session.proto.mapper";
 import SessionRefreshToken from "../../../domain/session/value-objects/sesion-refresh-token.vo";
 import AuthHelper from "../helpers/auth.helper";
 import UserProtoMapper from "../mappers/user.proto.mapper";
@@ -27,15 +27,15 @@ export class AuthHandler {
     }
 
     async anonymousSignIn(
-        call: grpc.ServerUnaryCall<authProto.AnonymousSignInRequest, authProto.AuthResponse>,
-        callback: grpc.sendUnaryData<authProto.AuthResponse>
+        call: grpc.ServerUnaryCall<authProto.AnonymousSignInRequest, authProto.SessionResponse>,
+        callback: grpc.sendUnaryData<authProto.SessionResponse>
     ) {
         try {
             const {deviceId} = call.request;
             // logger.log('anonymousSignIn ' + deviceId);
             const session = await this.anonymousSignInUseCase.execute(new DeviceDeviceId(deviceId));
 
-            const result = authProto.AuthResponse.create({auth: AuthProtoMapper.toProto(session)});
+            const result = authProto.SessionResponse.create({session: SessionProtoMapper.toProto(session)});
 
             // logger.log(result);
             callback(null, result);
@@ -47,8 +47,8 @@ export class AuthHandler {
     }
 
     async refreshTokens(
-        call: grpc.ServerUnaryCall<authProto.RefreshTokensRequest, authProto.AuthResponse>,
-        callback: grpc.sendUnaryData<authProto.AuthResponse>
+        call: grpc.ServerUnaryCall<authProto.RefreshTokensRequest, authProto.SessionResponse>,
+        callback: grpc.sendUnaryData<authProto.SessionResponse>
     ) {
         const {token} = call.request;
 
@@ -59,7 +59,7 @@ export class AuthHandler {
 
             const authObject = await this.refreshTokensUseCase.execute(userId, refreshToken);
 
-            const response = authProto.AuthResponse.create({auth: AuthProtoMapper.toProto(authObject)})
+            const response = authProto.SessionResponse.create({session: SessionProtoMapper.toProto(authObject)})
 
             // logger.log(response);
 
