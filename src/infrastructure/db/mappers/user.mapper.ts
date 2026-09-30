@@ -7,10 +7,10 @@ type UserSaveData = Omit<
     User,
     "createdAt" | "updatedAt" | "passwordHash"
 >;
-type UserRegistrationData = Omit<
-    User,
-    "createdAt" | "updatedAt"
->;
+// type UserRegistrationData = Omit<
+//     User,
+//     "createdAt" | "updatedAt"
+// >;
 
 export class UserDbMapper {
     static toPersistence(user: UserEntity): UserSaveData {

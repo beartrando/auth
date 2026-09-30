@@ -1,3 +1,3 @@
-import * as userSeed from './user.seed';
-
-userSeed.seedUsers();
+// import * as userSeed from './user.seed';
+//
+// userSeed.seedUsers();
