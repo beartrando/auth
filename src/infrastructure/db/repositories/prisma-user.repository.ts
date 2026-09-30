@@ -3,7 +3,7 @@ import {PrismaClient} from "@prisma/client";
 import UserRepository from "../../../domain/user/user.repository";
 import UserEntity from "../../../domain/user/user.entity";
 
-import UserDbMapper from "../mappers/user.mapper";
+import UserDbMapper from "../mappers/user.db.mapper";
 import UserId from "../../../domain/user/value-objects/user-id.vo";
 
 export class PrismaUserRepository implements UserRepository {
