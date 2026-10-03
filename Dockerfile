@@ -83,7 +83,8 @@ WORKDIR /usr/src/app
 
 ENV NODE_ENV=production
 
-COPY --from=build /deploy .
+COPY --from=build /deploy/dist ./dist
+COPY --from=build /deploy/node_modules ./node_modules
 
 RUN printf "%s\n" "$VERSION" > VERSION
 
