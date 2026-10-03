@@ -73,7 +73,7 @@ RUN pnpm --filter auth build
 RUN pnpm --filter auth deploy /deploy --prod
 
 # ---------- PROD ----------
-FROM node:22 AS prod
+FROM node:22-slim AS prod
 
 ARG VERSION=dev
 
