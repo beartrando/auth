@@ -1,7 +1,7 @@
 ARG VERSION=dev
 
 # ---------- BASE ----------
-FROM node:22 AS base
+FROM node:22-slim AS base
 
 WORKDIR /usr/src/app
 
@@ -20,7 +20,13 @@ COPY services/auth/tsconfig.json ./services/auth/
 COPY services/auth/src ./services/auth/src/
 COPY services/auth/__tests__ ./services/auth/__tests__/
 
-RUN apt-get update && apt-get install -y protobuf-compiler
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        openssl \
+        protobuf-compiler \
+        libprotobuf-dev \
+        wget \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN corepack enable && corepack prepare pnpm@11.9.0 --activate
 
@@ -79,10 +85,8 @@ ARG VERSION=dev
 
 ENV APP_VERSION=$VERSION
 
-FROM node:22-slim AS prod
-
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends openssl \
+    && apt-get install -y --no-install-recommends \
         openssl \
         wget \
     && rm -rf /var/lib/apt/lists/*
