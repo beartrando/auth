@@ -79,6 +79,12 @@ ARG VERSION=dev
 
 ENV APP_VERSION=$VERSION
 
+FROM node:22-slim AS prod
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends openssl \
+    && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /usr/src/app
 
 ENV NODE_ENV=production
