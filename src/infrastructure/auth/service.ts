@@ -7,7 +7,6 @@ import TokenService from "../../application/ports/token-service.port";
 import AuthConfig from "./interfaces/auth-config";
 import TokenPayload from "./interfaces/token-payload";
 import UserId from "../../domain/user/value-objects/user-id.vo";
-import logger from "@shared/logger";
 import {TokenExpiredError} from "@shared/errors";
 
 
