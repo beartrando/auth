@@ -11,9 +11,6 @@ module.exports = {
         '!src/contracts/**',
     ],
     coverageDirectory: 'coverage',
-    moduleNameMapper: {
-        '^@shared/(.*)$': '<rootDir>/../../shared/$1/src',
-    },
     setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
     globals: {
         'ts-jest': {
