@@ -40,9 +40,6 @@ RUN pnpm install --offline --frozen-lockfile
 RUN mkdir -p ./services/auth/src/contracts/proto
 RUN pnpm --filter auth proto:generate
 
-RUN mkdir -p ./shared/errors/src/contracts/proto
-RUN pnpm --filter @shared/errors proto:generate
-
 RUN pnpm --filter auth prisma:generate
 
 # ---------- DEV ----------
