@@ -18,7 +18,6 @@ COPY services/auth/package*.json ./services/auth/
 COPY services/auth/jest.config.js ./services/auth/
 COPY services/auth/tsconfig.json ./services/auth/
 COPY services/auth/src ./services/auth/src/
-COPY services/auth/__tests__ ./services/auth/__tests__/
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
