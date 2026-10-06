@@ -17,4 +17,3 @@ export const authConfig: AuthConfig = {
 };
 
 export default authConfig;
-
