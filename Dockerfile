@@ -27,18 +27,17 @@ RUN apt-get update \
         wget \
     && rm -rf /var/lib/apt/lists/*
 
-RUN corepack enable && corepack prepare pnpm@11.28.4 --activate
+RUN corepack enable && corepack prepare pnpm@11.9.0 --activate
 
 
 # ---------- DEPS ----------
 FROM base AS deps
 
 RUN pnpm fetch
-RUN pnpm install --offline --frozen-lockfile
+RUN pnpm install --offline --frozen-lockfile --ignore-scripts
 
 RUN mkdir -p ./services/auth/src/contracts/proto
 RUN pnpm --filter auth proto:generate
-
 
 RUN pnpm --filter auth prisma:generate
 
@@ -65,12 +64,12 @@ FROM deps AS build
 
 ENV NODE_ENV=production
 
-
 RUN pnpm --filter @shared/logger build
 RUN pnpm --filter @shared/grpc-client-manager build
 RUN pnpm --filter @shared/errors build
 RUN pnpm --filter @shared/kafka-manager build
 RUN pnpm --filter @shared/pg-boss-manager build
+
 RUN pnpm --filter auth build
 
 RUN pnpm --filter auth deploy /deploy --prod
