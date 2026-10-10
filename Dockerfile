@@ -17,6 +17,7 @@ COPY tsconfig.base.json ./
 COPY services/auth/package*.json ./services/auth/
 COPY services/auth/jest.config.js ./services/auth/
 COPY services/auth/tsconfig.json ./services/auth/
+COPY services/auth/jest.setup.ts ./services/auth/
 COPY services/auth/src ./services/auth/src/
 
 RUN apt-get update \
